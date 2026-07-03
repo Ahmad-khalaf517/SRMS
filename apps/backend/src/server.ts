@@ -1,5 +1,6 @@
-import express from 'express';
-const app = express();
+import http from 'http';
+import app, { BASE_URL } from "./app";
 
-app.get('/api', (req, res) => res.json({ message: "Hello from Express!" }));
-app.listen(5000, () => console.log('Server running on port 5000'));
+const server = http.createServer(app);
+
+export { server, BASE_URL };
