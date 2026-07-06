@@ -16,7 +16,10 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
 
-    "rootDir": "."
+    "paths": {
+      "@/*": ["./src/*"],
+      "@srms/ui/*": ["../../packages/ui/src/*"]
+    }
   },
   "include": ["src"]
 }
