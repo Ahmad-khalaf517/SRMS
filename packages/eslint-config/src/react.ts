@@ -6,20 +6,12 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import base from './base';
 
 export default defineConfig([
-  globalIgnores([
-    'dist',
-    'build',
-    'coverage',
-    'node_modules',
-  ]),
+  globalIgnores(['dist', 'build', 'coverage', 'node_modules']),
   ...base,
   {
     files: ['**/*.{ts,tsx}'],
 
-    extends: [
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-    ],
+    extends: [reactHooks.configs.flat.recommended, reactRefresh.configs.vite],
 
     languageOptions: {
       globals: globals.browser,
