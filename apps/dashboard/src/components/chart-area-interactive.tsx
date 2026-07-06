@@ -146,6 +146,7 @@ export function ChartAreaInteractive() {
 
   React.useEffect(() => {
     if (isMobile) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTimeRange("7d")
     }
   }, [isMobile])
@@ -259,7 +260,7 @@ export function ChartAreaInteractive() {
               cursor={false}
               content={
                 <ChartTooltipContent
-                  labelFormatter={(value) => {
+                  labelFormatter={(value: string | number | Date) => {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
