@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-import errorHandler from "./middleware/error.middleware";
-import logRequestHandler from "./middleware/log-requests";
-import notFoundHandler from "./middleware/not-found.middleware";
+import errorHandler from "./middleware/error.middleware.js";
+import logRequestHandler from "./middleware/log-requests.js";
+import notFoundHandler from "./middleware/not-found.middleware.js";
 
 dotenv.config();
 const API_VERSION = process.env.API_VERSION;

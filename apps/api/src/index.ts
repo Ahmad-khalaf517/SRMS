@@ -1,5 +1,5 @@
-import { server, BASE_URL } from "./server";
-import connectDB from "./config/db";
+import { server, BASE_URL } from "./server.js";
+import connectDB from "./config/db.js";
 
 connectDB();
 
