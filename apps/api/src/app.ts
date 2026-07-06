@@ -19,7 +19,7 @@ app.use(logRequestHandler);
 
 // Register routes
 // app.use(BASE_URL, routes);
-app.use(BASE_URL, (req, res) => {
+app.use(BASE_URL, (_req, res) => {
   res.json({ message: "Hello from Express!" });
 });
 

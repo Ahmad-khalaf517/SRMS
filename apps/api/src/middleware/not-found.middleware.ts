@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 const notFoundHandler = (
-    req: Request,
+    _req: Request,
     res: Response,
 ) => {
     console.log("ROUTE NOT FOUND");
