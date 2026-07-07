@@ -8,11 +8,13 @@ import {
   FieldSeparator,
 } from "@srms/ui/components/field"
 import { Input } from "@srms/ui/components/input"
+import { Link } from "react-router"
 
 export default function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props}>
       <FieldGroup>
@@ -54,9 +56,9 @@ export default function LoginForm({
           </Button>
           <FieldDescription className="text-center">
             Don&apos;t have an account?{" "}
-            <a href="#" className="underline underline-offset-4">
+            <Link to="/signup" className="underline underline-offset-4">
               Sign up
-            </a>
+            </Link>
           </FieldDescription>
         </Field>
       </FieldGroup>

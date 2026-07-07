@@ -11,7 +11,7 @@ export default function Login() {
             <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <GalleryVerticalEnd className="size-4" />
             </div>
-            Acme Inc.
+            SRMS Inc.
           </a>
         </div>
         <div className="flex flex-1 items-center justify-center">
@@ -23,7 +23,7 @@ export default function Login() {
       <div className="relative hidden bg-muted lg:block">
         <img
           src="https://ui.shadcn.com/placeholder.svg"
-          alt="Image"
+          alt="Place holder image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
       </div>
