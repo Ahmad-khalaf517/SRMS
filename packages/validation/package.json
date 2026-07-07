@@ -21,6 +21,18 @@
       "types": "./src/http/index.ts",
       "import": "./src/http/index.ts"
     },
+    "./auth": {
+      "types": "./src/auth/index.ts",
+      "import": "./src/auth/index.ts"
+    },
+    "./auth/login": {
+      "types": "./src/auth/login.schema.ts",
+      "import": "./src/auth/login.schema.ts"
+    },
+    "./auth/register": {
+      "types": "./src/auth/register.schema.ts",
+      "import": "./src/auth/register.schema.ts"
+    },
     "./health": {
       "types": "./src/health/health.schema.ts",
       "import": "./src/health/health.schema.ts"

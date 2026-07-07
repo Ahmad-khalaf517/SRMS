@@ -1,3 +1,4 @@
+export * from './auth/index.js';
 export * from './orders/order-status.js';
 export * from './orders/order-type.js';
 export * from './payments/payment-method.js';

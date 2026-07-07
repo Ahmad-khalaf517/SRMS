@@ -1,5 +1,7 @@
 import { cn } from '@srms/ui/lib/utils';
 import { Button } from '@srms/ui/components/button';
+import { LoginSchema } from '@srms/validation/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Field,
   FieldDescription,
@@ -8,11 +10,46 @@ import {
   FieldSeparator,
 } from '@srms/ui/components/field';
 import { Input } from '@srms/ui/components/input';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router';
+import { z } from 'zod';
+
+import { useLogin } from '@/modules/auth/hooks/use-login';
+import { getErrorMessage } from '@/modules/auth/lib/error-message';
+
+type LoginFormValues = z.infer<typeof LoginSchema>;
 
 export default function LoginForm({ className, ...props }: React.ComponentProps<'form'>) {
+  const loginMutation = useLogin();
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = form.handleSubmit(
+    async (values) => {
+      try {
+        await loginMutation.mutateAsync(values);
+      } catch (error) {
+        alert(getErrorMessage(error));
+      }
+    },
+    (errors) => {
+      const firstError = Object.values(errors)[0];
+      if (firstError && typeof firstError === 'object' && 'message' in firstError) {
+        const message = firstError.message;
+        if (typeof message === 'string') {
+          alert(message);
+        }
+      }
+    },
+  );
+
   return (
-    <form className={cn('flex flex-col gap-6', className)} {...props}>
+    <form className={cn('flex flex-col gap-6', className)} onSubmit={onSubmit} {...props}>
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Login to your account</h1>
@@ -22,7 +59,18 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
         </div>
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input
+            id="email"
+            type="email"
+            placeholder="m@example.com"
+            disabled={loginMutation.isPending}
+            {...form.register('email')}
+          />
+          {form.formState.errors.email ? (
+            <FieldDescription className="text-red-500">
+              {form.formState.errors.email.message}
+            </FieldDescription>
+          ) : null}
         </Field>
         <Field>
           <div className="flex items-center">
@@ -31,10 +79,25 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
               Forgot your password?
             </a>
           </div>
-          <Input id="password" type="password" required />
+          <Input
+            id="password"
+            type="password"
+            disabled={loginMutation.isPending}
+            {...form.register('password')}
+          />
+          {form.formState.errors.password ? (
+            <FieldDescription className="text-red-500">
+              {form.formState.errors.password.message}
+            </FieldDescription>
+          ) : null}
         </Field>
         <Field>
-          <Button type="submit">Login</Button>
+          <Button type="submit" disabled={loginMutation.isPending}>
+            {loginMutation.isPending ? 'Logging in...' : 'Login'}
+          </Button>
+          {loginMutation.isPending ? (
+            <FieldDescription>Loading, please wait...</FieldDescription>
+          ) : null}
         </Field>
         <FieldSeparator>Or continue with</FieldSeparator>
         <Field>

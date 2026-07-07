@@ -33,6 +33,18 @@
       "types": "./src/payments/payment-status.ts",
       "import": "./src/payments/payment-status.ts"
     },
+    "./auth": {
+      "types": "./src/auth/index.ts",
+      "import": "./src/auth/index.ts"
+    },
+    "./auth/login": {
+      "types": "./src/auth/login.types.ts",
+      "import": "./src/auth/login.types.ts"
+    },
+    "./auth/register": {
+      "types": "./src/auth/register.types.ts",
+      "import": "./src/auth/register.types.ts"
+    },
     "./users/user-role": {
       "types": "./src/users/user-role.ts",
       "import": "./src/users/user-role.ts"
