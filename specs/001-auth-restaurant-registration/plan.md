@@ -60,25 +60,34 @@ Implement first-class authentication for SRMS with restaurant onboarding, owner 
    - Defaults: `isActive = true`.
 
 2. `users`
-   - Fields: `_id`, `restaurantId`, `name`, `email`, `password`, `role`, `isActive`, `createdAt`, `updatedAt`.
-   - Defaults: `isActive = true`.
+
+- Fields: `_id`, `name`, `email`, `password`, `isActive`, `createdAt`, `updatedAt`.
+- Defaults: `isActive = true`.
+
+3. `user_roles`
+
+- Fields: `_id`, `userId`, `restaurantId`, `role`, `isActive`, `createdAt`, `updatedAt`.
+- Defaults: `isActive = true`.
 
 ### Relationships
 
-- One restaurant has many users.
-- Each user belongs to exactly one restaurant (`users.restaurantId -> restaurants._id`).
+- One restaurant has many user-role assignments.
+- One user has many user-role assignments.
+- User-role assignment binds one user to one restaurant with one role (`user_roles.userId -> users._id`, `user_roles.restaurantId -> restaurants._id`).
 
 ### Indexes and Constraints
 
 - `users.email`: unique index, normalized lower-case value.
 - `restaurants.email`: non-unique index for contact lookups.
-- `users.restaurantId`: index for tenant user queries.
+- `user_roles.userId`: index for user permission lookups.
+- `user_roles.restaurantId`: index for tenant user-role queries.
+- `user_roles`: unique compound index `(userId, restaurantId, role)`.
 - Optional compound index for future role queries: `(restaurantId, role)`.
 
 ### Transaction Strategy
 
-- Register flow must create restaurant and first user atomically via Mongo transaction/session.
-- On failure, rollback both creations to avoid orphan restaurant/user records.
+- Register flow must create restaurant, first user, and first user-role assignment atomically via Mongo transaction/session.
+- On failure, rollback all three writes to avoid orphan records.
 
 ### Data Validation Rules
 
@@ -118,9 +127,10 @@ Registration:
 3. Start DB transaction.
 4. Create restaurant.
 5. Hash password.
-6. Create user with ADMIN role.
-7. Commit transaction.
-8. Generate tokens and return envelope.
+6. Create user.
+7. Create `user_roles` assignment with ADMIN role.
+8. Commit transaction.
+9. Generate tokens and return envelope.
 
 Login:
 
@@ -204,7 +214,7 @@ Login:
 1. Add shared auth types in `packages/types`.
 2. Add shared auth schemas in `packages/validation`.
 3. Add/extend auth methods in `packages/api-client`.
-4. Create restaurant and user models in API.
+4. Create restaurant, user, and user-role models in API.
 5. Build `modules/auth` repository/service/controller/routes.
 6. Add JWT + bcrypt utilities and auth middleware.
 7. Integrate dashboard forms and API mutations.
@@ -228,8 +238,8 @@ Login:
 
 ### Scalability Considerations
 
-- Tenant linkage through `restaurantId` supports future branch-level models.
-- Role model includes ADMIN/CASHIER/KITCHEN_STAFF for upcoming operational apps.
+- Tenant linkage through `user_roles.restaurantId` supports future branch-level models.
+- Role model includes ADMIN/CASHIER/KITCHEN_STAFF via `user_roles` assignment for upcoming operational apps.
 - API contracts designed reusable for future customer/delivery clients.
 
 ## 10. Definition of Completion
@@ -237,7 +247,7 @@ Login:
 Feature planning and implementation will be considered complete when:
 
 1. Register and login endpoints pass acceptance scenarios and follow envelope/error standards.
-2. Restaurant and user models exist with required indexes/constraints and transactional registration flow.
+2. Restaurant, user, and user-role models exist with required indexes/constraints and transactional registration flow.
 3. Dashboard signup/login are integrated with real API and redirect behavior.
 4. Protected route foundation is active in API and dashboard routing.
 5. Shared auth contracts/schemas are reused from packages with no duplicate business definitions.
