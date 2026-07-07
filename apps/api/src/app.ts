@@ -1,11 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import errorHandler from './middleware/error.middleware.js';
-import logRequestHandler from './middleware/log-requests.js';
-import notFoundHandler from './middleware/not-found.middleware.js';
+import healthRoutes from '@/modules/health/routes/health.routes';
+import { errorHandler, requestLogger, notFoundHandler } from '@/shared/http/middleware/index';
 
 dotenv.config();
-const API_VERSION = process.env.API_VERSION;
+const API_VERSION = process.env.API_VERSION ?? '1';
 const BASE_URL = `/api/v${API_VERSION}`;
 
 const app = express();
@@ -14,14 +13,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Request logger (optional)
-app.use(logRequestHandler);
+app.use(requestLogger);
 
 // Register routes
-// app.use(BASE_URL, routes);
-app.use(BASE_URL, (_req, res) => {
-  res.json({ message: 'Hello from Express!' });
-});
+app.use(BASE_URL, healthRoutes);
 
 // 404 handler
 app.use(notFoundHandler);

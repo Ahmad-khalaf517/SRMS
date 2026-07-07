@@ -7,16 +7,20 @@
     "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "build": "tsc",
-    "start": "node dist/index.js",
+    "build": "tsc --noEmit",
+    "start": "tsx src/index.ts",
     "typecheck": "tsc --noEmit",
     "format": "prettier -w ."
   },
   "dependencies": {
-    "@srms/constants": "workspace:*",
+    "@srms/types": "workspace:*",
+    "@srms/utils": "workspace:*",
+    "@srms/validation": "workspace:*",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.7.2"
+    "mongoose": "^9.7.2",
+    "pino": "^9.9.5",
+    "zod": "^4.4.3"
   },
   "keywords": [],
   "author": "",

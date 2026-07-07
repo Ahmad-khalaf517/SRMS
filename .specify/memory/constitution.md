@@ -1,6 +1,6 @@
 <!--
 Sync Impact Report
-- Version change: template (unversioned) -> 1.0.0
+- Version change: 1.0.0 -> 1.0.1
 - Modified principles:
 	- PRINCIPLE_1_NAME -> Single Source of Truth
 	- PRINCIPLE_2_NAME -> Feature-Driven Domain Architecture
@@ -122,19 +122,15 @@ srms/
 	apps/
 		api/
 		dashboard/
-		kitchen/
-		customer/
-		delivery/
+		# planned: kitchen/, customer/, delivery/
 	packages/
 		ui/
 		types/
 		validation/
 		api-client/
-		constants/
 		utils/
-		config/
+		typescript-config/
 		eslint-config/
-		tsconfig/
 	.github/
 ```
 
@@ -145,6 +141,10 @@ shadcn/ui, React Hook Form, TanStack Query, Zustand, and Zod.
 
 Backend baseline MUST use Node.js, Express.js, TypeScript, MongoDB, Mongoose, JWT,
 Socket.IO, and Zod.
+
+API runtime and local development MUST be tsx-first in this repository. Internal
+workspace packages MUST be consumable from source TypeScript exports so local
+development does not require building dist artifacts before running the API.
 
 Shared tooling MUST include TypeScript, Zod, ESLint, and Prettier.
 
@@ -159,13 +159,12 @@ Shared package responsibilities are mandatory:
   modules.
 - packages/api-client: axios configuration, query helpers, and shared API functions
   used by all frontend apps.
-- packages/constants: route constants, query keys, storage keys, and configuration
-  constants; business enums are excluded.
 - packages/utils: framework-independent pure helpers and formatting/calculation
   utilities.
 
-Business enums MUST live in packages/types/src/domain and MUST prefer const objects
-with literal types over TypeScript enums.
+Business enums and shared business types MUST be organized by feature under
+packages/types/src/<feature> and MUST prefer const objects with literal types over
+TypeScript enums.
 
 ### Frontend and Backend Structure Rules
 
@@ -185,8 +184,12 @@ src/
 ```
 
 Backend MUST follow vertical slices by module (auth, users, categories, menu,
-orders, kitchen, reports). Each module MUST include controller, service,
-repository, model, routes, validation, mapper, types, and tests.
+orders, kitchen, reports). Each module MUST include routes and controller at
+minimum. Additional layers (service, repository, validation, mapper, model, types,
+tests) are added only when needed by complexity.
+
+API local imports MUST use path aliases with @/ (for example @/modules,
+@/shared, @/config) rather than deep relative traversal.
 
 ### State, Validation, Security, and Data Rules
 
@@ -311,4 +314,4 @@ Compliance policy:
 - Non-compliant changes MUST be blocked until addressed or explicitly waived.
 - Waivers MUST include owner, scope, expiration, and remediation plan.
 
-**Version**: 1.0.0 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-07
+**Version**: 1.0.1 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-08

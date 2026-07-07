@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
+import logger from '@/shared/logging/logger';
 
-const connectDB = async (): Promise<void> => {
+const connectDB = async (): Promise<typeof mongoose> => {
   try {
-    await mongoose.connect(process.env.MONGO_URI as string);
-    console.log('MongoDB connected');
+    const db = await mongoose.connect(process.env.MONGO_URI as string);
+    logger.info('MongoDB connected');
+    return db;
   } catch (error) {
-    console.error(error);
+    logger.error({ error }, 'MongoDB connection failed');
     process.exit(1);
   }
 };

@@ -1,7 +1,13 @@
 {
   "extends": "@srms/typescript-config/node.json",
   "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "noImplicitAny": true,
+    "noEmit": true,
     "removeComments": true,
     "preserveConstEnums": true,
     "rootDir": "./src",
