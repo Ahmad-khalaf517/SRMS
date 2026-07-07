@@ -40,7 +40,16 @@
 
 _GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-[Gates determined based on constitution file]
+- Domain boundaries defined by business capability (no layer-first drift).
+- Shared contracts identified (types/schemas/enums/constants) and reused from packages.
+- Validation plan covers all external inputs with Zod (API, forms, query, env).
+- Auth and authorization rules explicitly captured for protected routes and permissions.
+- State ownership split documented (TanStack Query for server state, Zustand for UI/session).
+- API envelope, AppError hierarchy, and structured logging strategy included.
+- Real-time requirements evaluated; Socket.IO preferred where immediacy is required.
+- Testing phase declared per domain (deferred-with-plan or required automated tests).
+- Future-proofing checklist answered (reuse, multi-branch, scale, AI-readability, no duplication).
+- Any constitution exception includes owner, expiration, and remediation plan.
 
 ## Project Structure
 

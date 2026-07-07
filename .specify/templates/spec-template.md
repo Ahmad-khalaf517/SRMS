@@ -103,6 +103,22 @@ _Example of marking unclear requirements:_
 - **[Entity 1]**: [What it represents, key attributes without implementation]
 - **[Entity 2]**: [What it represents, relationships to other entities]
 
+## Constitution Alignment _(mandatory)_
+
+- **Domain Ownership**: [Which domain/module owns this feature and why]
+- **Shared Contracts**: [Types/schemas/enums/constants reused or added in shared packages]
+- **Validation Coverage**: [All external inputs and their Zod validation points]
+- **AuthN/AuthZ Impact**: [Access model, roles, permissions, protected routes]
+- **State Ownership**: [TanStack Query vs Zustand boundaries]
+- **API and Errors**: [Response envelope and AppError types used]
+- **Testing Phase Declaration**: [Deferred-with-plan or automated tests required now]
+- **Future-Proofing Check**:
+  1. [Reuse by another frontend?]
+  2. [Support multi-branch?]
+  3. [Scales to future customer/delivery apps?]
+  4. [AI agents can understand/extend safely?]
+  5. [Avoids duplication?]
+
 ## Success Criteria _(mandatory)_
 
 <!--
