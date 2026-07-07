@@ -26,7 +26,6 @@
 - Collection: `users`
 - Fields:
   - `_id`: ObjectId, primary key.
-  - `restaurantId`: ObjectId, required, references `restaurants._id`.
   - `name`: string, required, trimmed.
   - `email`: string, required, normalized lowercase, unique.
   - `password`: string, required, bcrypt hash only.
@@ -42,6 +41,39 @@
   - Unique index on `email`.
   - Index on `restaurantId`.
   - Optional compound index `(restaurantId, role)` for role-based queries.
+
+## Entity: User Roles
+
+- Description:
+  Represents the association between an authenticated user account and a restaurant, defining the user's role and access permissions within that restaurant.
+
+- Collection:
+  `user_roles`
+
+- Fields:
+  - `_id`: ObjectId, primary key.
+  - `userId`: ObjectId, required, references `users._id`.
+  - `restaurantId`: ObjectId, required, references `restaurants._id`.
+  - `role`: string, required, represents the user's assigned role within the restaurant.
+  - `isActive`: boolean, default `true`, indicates whether the user role assignment is active.
+  - `createdAt`: date, auto-generated.
+  - `updatedAt`: date, auto-generated.
+
+- Validation Rules:
+  - `userId` is required and must reference an existing user.
+  - `restaurantId` is required and must reference an existing restaurant.
+  - `role` is required and must be one of the approved system roles:
+    - `ADMIN`
+    - `CASHIER`
+    - `KITCHEN_STAFF`
+  - A user cannot have duplicate role assignments within the same restaurant.
+  - Inactive role assignments should not be considered for authentication or authorization checks.
+
+- Indexes:
+  - Unique compound index on `(userId, restaurantId, role)` to prevent duplicate role assignments.
+  - Index on `restaurantId` for retrieving restaurant users.
+  - Index on `userId` for retrieving user permissions.
+  - Optional compound index on `(restaurantId, role)` for role-based queries.
 
 ## Entity: AuthSessionPayload (contract entity)
 
