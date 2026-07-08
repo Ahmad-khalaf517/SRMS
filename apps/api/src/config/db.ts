@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 import logger from '@/shared/logging/logger';
+import { env } from '@/config/env';
 
 const connectDB = async (): Promise<typeof mongoose> => {
-  const mongoUri = process.env.MONGODB_URI ?? process.env.MONGO_URI;
+  const mongoUri = env.MONGODB_URI;
 
   if (!mongoUri) {
-    logger.error('MongoDB connection failed: missing MONGODB_URI or MONGO_URI');
+    logger.error('MongoDB connection failed: missing MONGODB_URI');
     process.exit(1);
   }
 

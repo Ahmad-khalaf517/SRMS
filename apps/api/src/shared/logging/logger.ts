@@ -4,8 +4,6 @@ import pino from 'pino';
 // Check if we are running in development mode
 const isDevelopment = env.NODE_ENV === 'development';
 
-console.log('is development:', isDevelopment, env.NODE_ENV);
-
 const logger = pino({
   level: env.LOG_LEVEL ?? 'info',
 

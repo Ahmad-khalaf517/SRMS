@@ -2,6 +2,7 @@ import jwt, { type SignOptions } from 'jsonwebtoken';
 import { type UserRole } from '@srms/types/users/user-role';
 
 import { UnauthorizedError } from '@/shared/errors/app-error';
+import { env } from '@/config/env';
 
 type AccessTokenPayload = {
   userId: string;
@@ -13,15 +14,14 @@ type RefreshTokenPayload = {
   userId: string;
 };
 
-const ACCESS_TOKEN_SECRET = process.env.JWT_ACCESS_SECRET!;
-const REFRESH_TOKEN_SECRET = process.env.JWT_REFRESH_SECRET!;
+const ACCESS_TOKEN_SECRET = env.JWT_ACCESS_SECRET!;
+const REFRESH_TOKEN_SECRET = env.JWT_REFRESH_SECRET!;
 const ACCESS_TOKEN_TTL: SignOptions['expiresIn'] =
-  (process.env.JWT_ACCESS_TTL as SignOptions['expiresIn']) ?? '15m';
+  (env.JWT_ACCESS_TTL as SignOptions['expiresIn']) ?? '15m';
 const REFRESH_TOKEN_TTL: SignOptions['expiresIn'] =
-  (process.env.JWT_REFRESH_TTL as SignOptions['expiresIn']) ?? '7d';
+  (env.JWT_REFRESH_TTL as SignOptions['expiresIn']) ?? '7d';
 
 export const generateAccessToken = (payload: AccessTokenPayload): string => {
-  console.log(ACCESS_TOKEN_SECRET);
   return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_TTL });
 };
 
