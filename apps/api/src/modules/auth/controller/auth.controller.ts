@@ -10,7 +10,7 @@ import {
 import { UnauthorizedError } from '@/shared/errors/app-error';
 import { sendSuccess } from '@/shared/http/response';
 
-const REFRESH_COOKIE_NAME = 'srms_refresh_token';
+const REFRESH_COOKIE_NAME = process.env.REFRESH_COOKIE_NAME!;
 
 const getRefreshCookieOptions = () => ({
   httpOnly: true,

@@ -13,8 +13,8 @@ type RefreshTokenPayload = {
   userId: string;
 };
 
-const ACCESS_TOKEN_SECRET = process.env.JWT_ACCESS_SECRET ?? 'dev_access_secret';
-const REFRESH_TOKEN_SECRET = process.env.JWT_REFRESH_SECRET ?? 'dev_refresh_secret';
+const ACCESS_TOKEN_SECRET = process.env.JWT_ACCESS_SECRET!;
+const REFRESH_TOKEN_SECRET = process.env.JWT_REFRESH_SECRET!;
 const ACCESS_TOKEN_TTL: SignOptions['expiresIn'] =
   (process.env.JWT_ACCESS_TTL as SignOptions['expiresIn']) ?? '15m';
 const REFRESH_TOKEN_TTL: SignOptions['expiresIn'] =
