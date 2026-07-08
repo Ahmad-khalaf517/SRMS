@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { toast } from 'sonner';
 
 import { setAuthAccessToken } from '@/modules/auth/api/client';
-import { getErrorMessage } from '@/modules/auth/lib/error-message';
+import { getErrorMessage } from '@srms/utils';
 import { refreshRequest } from '@/modules/auth/api/refresh';
 import { useAuthSessionStore } from '@/modules/auth/store/auth-session.store';
 

@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import { setAuthAccessToken } from '@/modules/auth/api/client';
-import { getErrorMessage } from '@/modules/auth/lib/error-message';
+import { getErrorMessage } from '@srms/utils';
 import { registerRequest } from '@/modules/auth/api/register';
 import { useAuthSessionStore } from '@/modules/auth/store/auth-session.store';
 

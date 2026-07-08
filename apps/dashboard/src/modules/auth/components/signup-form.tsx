@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 
 import { useRegister } from '@/modules/auth/hooks/use-register';
-import { getErrorMessage } from '@/modules/auth/lib/error-message';
+import { getErrorMessage } from '@srms/utils';
 import {
   mapSignupToRegisterPayload,
   SignupFormSchema,

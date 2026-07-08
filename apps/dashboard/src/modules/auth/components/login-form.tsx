@@ -15,7 +15,7 @@ import { Link } from 'react-router';
 import { z } from 'zod';
 
 import { useLogin } from '@/modules/auth/hooks/use-login';
-import { getErrorMessage } from '@/modules/auth/lib/error-message';
+import { getErrorMessage } from '@srms/utils';
 
 type LoginFormValues = z.infer<typeof LoginSchema>;
 
