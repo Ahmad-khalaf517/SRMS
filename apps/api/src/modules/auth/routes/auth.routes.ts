@@ -5,6 +5,7 @@ import { Router } from 'express';
 import {
   currentUserController,
   loginController,
+  logoutController,
   refreshController,
   registerController,
 } from '@/modules/auth/controller/auth.controller';
@@ -16,6 +17,7 @@ const authRoutes = Router();
 authRoutes.post('/auth/register', validate({ body: RegisterSchema }), registerController);
 authRoutes.post('/auth/login', validate({ body: LoginSchema }), loginController);
 authRoutes.post('/auth/refresh', refreshController);
+authRoutes.post('/auth/logout', logoutController);
 authRoutes.get(
   '/auth/me',
   authenticate,

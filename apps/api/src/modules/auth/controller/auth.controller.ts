@@ -10,7 +10,7 @@ import {
 import { UnauthorizedError } from '@/shared/errors/app-error';
 import { sendSuccess } from '@/shared/http/response';
 
-const REFRESH_COOKIE_NAME = process.env.REFRESH_COOKIE_NAME!;
+const REFRESH_COOKIE_NAME = process.env.REFRESH_COOKIE_NAME ?? 'srms_refresh_token';
 
 const getRefreshCookieOptions = () => ({
   httpOnly: true,
@@ -26,6 +26,15 @@ const setRefreshTokenCookie = (res: Parameters<RequestHandler>[1], refreshToken?
   }
 
   res.cookie(REFRESH_COOKIE_NAME, refreshToken, getRefreshCookieOptions());
+};
+
+const clearRefreshTokenCookie = (res: Parameters<RequestHandler>[1]) => {
+  res.clearCookie(REFRESH_COOKIE_NAME, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/api',
+  });
 };
 
 export const registerController: RequestHandler = async (req, res, next) => {
@@ -69,6 +78,15 @@ export const refreshController: RequestHandler = async (req, res, next) => {
 
     const authData = await refreshAuth(refreshToken);
     sendSuccess(res, authData, 'Access token refreshed');
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logoutController: RequestHandler = async (_req, res, next) => {
+  try {
+    clearRefreshTokenCookie(res);
+    sendSuccess(res, null, 'Logout successful');
   } catch (error) {
     next(error);
   }
