@@ -21,6 +21,7 @@ const REFRESH_TOKEN_TTL: SignOptions['expiresIn'] =
   (process.env.JWT_REFRESH_TTL as SignOptions['expiresIn']) ?? '7d';
 
 export const generateAccessToken = (payload: AccessTokenPayload): string => {
+  console.log(ACCESS_TOKEN_SECRET);
   return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_TTL });
 };
 

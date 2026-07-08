@@ -2,8 +2,9 @@ import { server, BASE_URL } from '@/server';
 import connectDB from '@/config/db';
 import logger from '@/shared/logging/logger';
 import mongoose from 'mongoose';
+import { env } from '@/config/env';
 
-const PORT = process.env.PORT || 3000;
+const PORT = env.PORT;
 
 server.on('error', (error: NodeJS.ErrnoException) => {
   if (error.code === 'EADDRINUSE') {
@@ -28,7 +29,14 @@ const startServer = async () => {
         : 'localhost';
     const port = address && typeof address === 'object' ? address.port : PORT;
     const url = `http://${host}:${port}${BASE_URL}`;
-    logger.info({ url }, 'Server started');
+    // eslint-disable-next-line no-console
+    console.log('\n🚀 \x1b[32m%s\x1b[0m', '==============================================');
+    // eslint-disable-next-line no-console
+    console.log('✨  Server is running successfully!');
+    // eslint-disable-next-line no-console
+    console.log('🌐  \x1b[36m%s\x1b[0m', url);
+    // eslint-disable-next-line no-console
+    console.log('\x1b[32m%s\x1b[0m\n', '==============================================');
   });
 };
 

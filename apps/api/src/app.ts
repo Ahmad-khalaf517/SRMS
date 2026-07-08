@@ -1,16 +1,14 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import healthRoutes from '@/modules/health/routes/health.routes';
 import authRoutes from '@/modules/auth/routes/auth.routes';
 import { errorHandler, requestLogger, notFoundHandler } from '@/shared/http/middleware/index';
+import { env } from '@/config/env';
 
-dotenv.config();
-const API_VERSION = process.env.API_VERSION ?? '1';
+const API_VERSION = env.API_VERSION ?? '1';
 const BASE_URL = `/api/v${API_VERSION}`;
-const CORS_ORIGINS = (process.env.CORS_ORIGINS ?? 'http://localhost:5174')
-  .split(',')
+const CORS_ORIGINS = env.CORS_ORIGINS.split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
 

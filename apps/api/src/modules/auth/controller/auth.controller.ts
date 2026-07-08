@@ -9,12 +9,13 @@ import {
 } from '@/modules/auth/service/auth.service';
 import { UnauthorizedError } from '@/shared/errors/app-error';
 import { sendSuccess } from '@/shared/http/response';
+import { env } from '@/config/env';
 
-const REFRESH_COOKIE_NAME = process.env.REFRESH_COOKIE_NAME ?? 'srms_refresh_token';
+const REFRESH_COOKIE_NAME = env.REFRESH_COOKIE_NAME ?? 'srms_refresh_token';
 
 const getRefreshCookieOptions = () => ({
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
+  secure: env.NODE_ENV === 'production',
   sameSite: 'lax' as const,
   maxAge: 7 * 24 * 60 * 60 * 1000,
   path: '/api',
@@ -31,7 +32,7 @@ const setRefreshTokenCookie = (res: Parameters<RequestHandler>[1], refreshToken?
 const clearRefreshTokenCookie = (res: Parameters<RequestHandler>[1]) => {
   res.clearCookie(REFRESH_COOKIE_NAME, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/api',
   });
