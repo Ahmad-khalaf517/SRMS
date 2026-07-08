@@ -23,3 +23,13 @@ export const getCurrentUser = async (client: AxiosInstance): Promise<AuthRespons
   const response = await client.get<AuthResponse>('/auth/me');
   return response.data;
 };
+
+export const refreshAuth = async (client: AxiosInstance): Promise<AuthResponse> => {
+  const response = await client.post<AuthResponse>('/auth/refresh');
+  return response.data;
+};
+
+export const logout = async (client: AxiosInstance): Promise<AuthResponse> => {
+  const response = await client.post<AuthResponse>('/auth/logout');
+  return response.data;
+};
