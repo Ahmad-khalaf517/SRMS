@@ -1,8 +1,8 @@
-import { type UserRole } from '@srms/types/users/user-role';
 import { type NextFunction, type Request, type RequestHandler, type Response } from 'express';
 
 import { ForbiddenError, UnauthorizedError } from '@/shared/errors/app-error';
 import { verifyAccessToken } from '@/modules/auth/utils/token.util';
+import { UserRole } from '@srms/api-contracts';
 
 export type AuthContext = {
   userId: string;

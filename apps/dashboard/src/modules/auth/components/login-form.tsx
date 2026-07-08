@@ -1,6 +1,6 @@
 import { cn } from '@srms/ui/lib/utils';
 import { Button } from '@srms/ui/components/button';
-import { LoginSchema } from '@srms/validation/auth';
+import { LoginSchema } from '@srms/api-contracts/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Field,

@@ -1,5 +1,4 @@
-import { type RegisterRequest } from '@srms/types/auth/register';
-import { RegisterSchema } from '@srms/validation/auth/register';
+import { type RegisterDTO, RegisterSchema } from '@srms/api-contracts/auth';
 import { z } from 'zod';
 
 export const SignupFormSchema = RegisterSchema.extend({
@@ -11,7 +10,7 @@ export const SignupFormSchema = RegisterSchema.extend({
 
 export type SignupFormValues = z.infer<typeof SignupFormSchema>;
 
-export const mapSignupToRegisterPayload = (values: SignupFormValues): RegisterRequest => ({
+export const mapSignupToRegisterPayload = (values: SignupFormValues): RegisterDTO => ({
   restaurant: values.restaurant,
   user: values.user,
 });

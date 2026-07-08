@@ -1,5 +1,3 @@
-import { UserRole } from '@srms/types/users/user-role';
-import { LoginSchema, RegisterSchema } from '@srms/validation/auth';
 import { Router } from 'express';
 
 import {
@@ -11,17 +9,19 @@ import {
 } from '@/modules/auth/controller/auth.controller';
 import { authenticate, authorize } from '@/modules/auth/utils/auth.middleware';
 import { validate } from '@/shared/http/middleware';
+import { RegisterSchema, AUTH_ENDPOINTS, LoginSchema } from '@srms/api-contracts/auth';
+import { USER_ROLE } from '@srms/api-contracts/user';
 
 const authRoutes = Router();
 
-authRoutes.post('/auth/register', validate({ body: RegisterSchema }), registerController);
-authRoutes.post('/auth/login', validate({ body: LoginSchema }), loginController);
-authRoutes.post('/auth/refresh', refreshController);
-authRoutes.post('/auth/logout', logoutController);
+authRoutes.post(AUTH_ENDPOINTS.REGISTER, validate({ body: RegisterSchema }), registerController);
+authRoutes.post(AUTH_ENDPOINTS.LOGIN, validate({ body: LoginSchema }), loginController);
+authRoutes.post(AUTH_ENDPOINTS.REFRESH, refreshController);
+authRoutes.post(AUTH_ENDPOINTS.LOGOUT, logoutController);
 authRoutes.get(
-  '/auth/me',
+  AUTH_ENDPOINTS.CURRENT_USER,
   authenticate,
-  authorize([UserRole.ADMIN, UserRole.CASHIER, UserRole.KITCHEN_STAFF]),
+  authorize([USER_ROLE.ADMIN, USER_ROLE.CASHIER, USER_ROLE.KITCHEN_STAFF]),
   currentUserController,
 );
 

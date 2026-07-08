@@ -1,10 +1,11 @@
 {
-  "extends": "./node.json",
+  "extends": "./base",
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "composite": true,
-    "noEmit": false
+    "noEmit": false,
+    "moduleResolution": "Bundler"
   }
 }

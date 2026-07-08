@@ -1,8 +1,8 @@
 import jwt, { type SignOptions } from 'jsonwebtoken';
-import { type UserRole } from '@srms/types/users/user-role';
 
 import { UnauthorizedError } from '@/shared/errors/app-error';
 import { env } from '@/config/env';
+import { UserRole } from '@srms/api-contracts';
 
 type AccessTokenPayload = {
   userId: string;

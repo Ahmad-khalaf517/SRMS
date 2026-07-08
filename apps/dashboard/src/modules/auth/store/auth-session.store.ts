@@ -1,12 +1,12 @@
-import { type AuthUser } from '@srms/types/auth';
+import type { User } from '@srms/api-contracts';
 import { create } from 'zustand';
 
 type AuthSessionState = {
-  user: AuthUser | null;
+  user: User | null;
   accessToken: string | null;
   isAuthenticated: boolean;
   // eslint-disable-next-line no-unused-vars
-  setSession: (payload: { user: AuthUser; accessToken: string }) => void;
+  setSession: (payload: { user: User; accessToken: string }) => void;
   clearSession: () => void;
 };
 

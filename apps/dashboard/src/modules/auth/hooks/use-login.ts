@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 
 import { setAuthAccessToken } from '@/modules/auth/api/client';
 import { getErrorMessage } from '@srms/utils';
-import { loginRequest } from '@/modules/auth/api/login';
+import { loginRequest } from '@/modules/auth/api';
 import { useAuthSessionStore } from '@/modules/auth/store/auth-session.store';
 
 export const useLogin = () => {

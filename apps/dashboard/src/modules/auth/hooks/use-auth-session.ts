@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 
 import { setAuthAccessToken } from '@/modules/auth/api/client';
 import { getErrorMessage } from '@srms/utils';
-import { refreshRequest } from '@/modules/auth/api/refresh';
+import { refreshRequest } from '@/modules/auth/api';
 import { useAuthSessionStore } from '@/modules/auth/store/auth-session.store';
 
 export const useAuthSession = () => {

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
 import { setAuthAccessToken } from '@/modules/auth/api/client';
-import { logoutRequest } from '@/modules/auth/api/logout';
+import { logoutRequest } from '@/modules/auth/api';
 import { useAuthSessionStore } from '@/modules/auth/store/auth-session.store';
 import { getErrorMessage } from '@srms/utils';
 

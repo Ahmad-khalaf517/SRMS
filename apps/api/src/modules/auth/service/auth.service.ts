@@ -1,6 +1,3 @@
-import { type AuthData } from '@srms/types/auth';
-import { UserRole } from '@srms/types/users/user-role';
-import { type LoginSchemaInput, type RegisterSchemaInput } from '@srms/validation/auth';
 import mongoose from 'mongoose';
 
 import {
@@ -21,10 +18,11 @@ import {
   verifyRefreshToken,
 } from '@/modules/auth/utils/token.util';
 import { ConflictError, UnauthorizedError } from '@/shared/errors/app-error';
+import { AuthData, LoginDTO, RegisterDTO, USER_ROLE } from '@srms/api-contracts';
 
 const normalizeEmail = (email: string): string => email.trim().toLowerCase();
 
-export const registerAuth = async (payload: RegisterSchemaInput): Promise<AuthData> => {
+export const registerAuth = async (payload: RegisterDTO): Promise<AuthData> => {
   const ownerEmail = normalizeEmail(payload.user.email);
   const restaurantEmail = normalizeEmail(payload.restaurant.email);
 
@@ -61,7 +59,7 @@ export const registerAuth = async (payload: RegisterSchemaInput): Promise<AuthDa
       {
         userId: user._id.toString(),
         restaurantId: restaurant._id.toString(),
-        role: UserRole.ADMIN,
+        role: USER_ROLE.ADMIN,
       },
       session,
     );
@@ -95,7 +93,7 @@ export const registerAuth = async (payload: RegisterSchemaInput): Promise<AuthDa
   }
 };
 
-export const loginAuth = async (payload: LoginSchemaInput): Promise<AuthData> => {
+export const loginAuth = async (payload: LoginDTO): Promise<AuthData> => {
   const email = normalizeEmail(payload.email);
   const user = await findUserByEmail(email);
 

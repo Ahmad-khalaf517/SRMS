@@ -1,3 +1,4 @@
+import { CreateResturantDTO } from '@srms/api-contracts';
 import { ClientSession, model, Schema, type InferSchemaType, type Types } from 'mongoose';
 
 const restaurantSchema = new Schema(
@@ -15,15 +16,8 @@ export type RestaurantDocument = InferSchemaType<typeof restaurantSchema> & { _i
 
 const RestaurantModel = model<RestaurantDocument>('Restaurant', restaurantSchema);
 
-type CreateRestaurantInput = {
-  name: string;
-  address: string;
-  phone: string;
-  email: string;
-};
-
 export const createRestaurant = async (
-  payload: CreateRestaurantInput,
+  payload: CreateResturantDTO,
   session?: ClientSession,
 ): Promise<RestaurantDocument> => {
   const [restaurant] = await RestaurantModel.create([payload], { session });

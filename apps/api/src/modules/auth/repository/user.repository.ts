@@ -1,3 +1,4 @@
+import { CreateUserDTO } from '@srms/api-contracts';
 import { ClientSession, model, Schema, type InferSchemaType, type Types } from 'mongoose';
 
 const userSchema = new Schema(
@@ -14,12 +15,6 @@ export type UserDocument = InferSchemaType<typeof userSchema> & { _id: Types.Obj
 
 const UserModel = model<UserDocument>('User', userSchema);
 
-type CreateUserInput = {
-  name: string;
-  email: string;
-  password: string;
-};
-
 export const findUserByEmail = async (email: string): Promise<UserDocument | null> => {
   return UserModel.findOne({ email: email.toLowerCase() });
 };
@@ -29,7 +24,7 @@ export const findUserById = async (id: string): Promise<UserDocument | null> => 
 };
 
 export const createUser = async (
-  payload: CreateUserInput,
+  payload: CreateUserDTO,
   session?: ClientSession,
 ): Promise<UserDocument> => {
   const [user] = await UserModel.create([payload], { session });

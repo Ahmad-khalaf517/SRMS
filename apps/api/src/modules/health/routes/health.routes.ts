@@ -1,11 +1,15 @@
 import { Router } from 'express';
-import { HealthQuerySchema } from '@srms/validation/health';
 
 import { validate } from '@/shared/http/middleware/index';
 import { getHealthController } from '@/modules/health/controller/health.controller';
+import { HEALTH_ENDPOINTS, HealthQuerySchema } from '@srms/api-contracts';
 
 const healthRoutes = Router();
 
-healthRoutes.get('/health', validate({ query: HealthQuerySchema }), getHealthController);
+healthRoutes.get(
+  HEALTH_ENDPOINTS.HEALTH,
+  validate({ query: HealthQuerySchema }),
+  getHealthController,
+);
 
 export default healthRoutes;

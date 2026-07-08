@@ -6,12 +6,11 @@ import {
   refreshAuth,
   registerRestaurantOwner,
 } from '@srms/api-client';
-import { type LoginRequest } from '@srms/types/auth/login';
-import { type RegisterRequest } from '@srms/types/auth/register';
+import { type LoginDTO, type RegisterDTO } from '@srms/api-contracts/auth';
 
 export const currentUserRequest = async () => getCurrentUser(authApiClient);
-export const loginRequest = async (payload: LoginRequest) => login(authApiClient, payload);
+export const loginRequest = async (payload: LoginDTO) => login(authApiClient, payload);
 export const logoutRequest = async () => logout(authApiClient);
 export const refreshRequest = async () => refreshAuth(authApiClient);
-export const registerRequest = async (payload: RegisterRequest) =>
+export const registerRequest = async (payload: RegisterDTO) =>
   registerRestaurantOwner(authApiClient, payload);

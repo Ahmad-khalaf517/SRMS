@@ -1,4 +1,4 @@
-import { UserRole, type UserRole as UserRoleType } from '@srms/types/users/user-role';
+import { CreateUserRoleDTO, USER_ROLE } from '@srms/api-contracts/user';
 import { ClientSession, model, Schema, type InferSchemaType, type Types } from 'mongoose';
 
 const userRoleSchema = new Schema(
@@ -8,7 +8,7 @@ const userRoleSchema = new Schema(
     role: {
       type: String,
       required: true,
-      enum: Object.values(UserRole),
+      enum: Object.values(USER_ROLE),
     },
     isActive: { type: Boolean, default: true },
   },
@@ -22,14 +22,8 @@ export type UserRoleDocument = InferSchemaType<typeof userRoleSchema> & { _id: T
 
 const UserRoleModel = model<UserRoleDocument>('UserRole', userRoleSchema, 'user_roles');
 
-type CreateUserRoleInput = {
-  userId: string;
-  restaurantId: string;
-  role: UserRoleType;
-};
-
 export const createUserRole = async (
-  payload: CreateUserRoleInput,
+  payload: CreateUserRoleDTO,
   session?: ClientSession,
 ): Promise<UserRoleDocument> => {
   const [userRole] = await UserRoleModel.create([payload], { session });

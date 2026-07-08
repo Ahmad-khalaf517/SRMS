@@ -1,0 +1,13 @@
+export const ORDER_STATUS = {
+  PENDING: 'PENDING',
+  PREPARING: 'PREPARING',
+  READY: 'READY',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+export const ORDER_TYPE = {
+  DINE_IN: 'DINE_IN',
+  TAKEAWAY: 'TAKEAWAY',
+  DELIVERY: 'DELIVERY',
+} as const;

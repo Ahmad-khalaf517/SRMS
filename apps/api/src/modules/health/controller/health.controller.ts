@@ -1,8 +1,8 @@
 import { type RequestHandler } from 'express';
 import { toIsoTimestamp } from '@srms/utils';
-import { type HealthResponse } from '@srms/types/health';
 
 import { sendSuccess } from '@/shared/http/response';
+import { HealthResponse } from '@srms/api-contracts';
 
 export const getHealthController: RequestHandler = (_req, res) => {
   const health: HealthResponse = {
