@@ -5,20 +5,24 @@ import LoginPage from '@/modules/auth/pages/login-page';
 import ProtectedRoute from '@/modules/auth/components/protected-route';
 import SignupPage from '@/modules/auth/pages/signup-page';
 import NotFound from '@/pages/not-found';
-import { useAuthSession } from '@/modules/auth/hooks/use-auth-session';
-import { InitialLoader } from '@/app/components/initial-loader';
+import { GuestRoute } from '@/modules/auth/components/guest-route';
+import ForbiddenPage from '@/pages/forbidden';
+import { RoleGuard } from '@/modules/auth/components/role-guard';
+import { USER_ROLE } from '@srms/api-contracts';
 
 export default function AppRoutes() {
-  const authSessionQuery = useAuthSession();
-  if (authSessionQuery.isLoading) return <InitialLoader />;
-
   return (
     <Routes>
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<DashboardPage />} />
+        <Route element={<RoleGuard allowedRoles={[USER_ROLE.ADMIN]} />}>
+          <Route path="/" element={<DashboardPage />} />
+        </Route>
+        <Route path="/403" element={<ForbiddenPage />} />
       </Route>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
+      <Route element={<GuestRoute />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
