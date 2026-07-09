@@ -1,6 +1,6 @@
-import { UserRole } from './constants';
+import { USER_ROLE } from './constants';
 
-export type UserRole = (typeof UserRole)[keyof typeof UserRole];
+export type UserRole = (typeof USER_ROLE)[keyof typeof USER_ROLE];
 
 export type UserRoleAssignment = {
   id: string;

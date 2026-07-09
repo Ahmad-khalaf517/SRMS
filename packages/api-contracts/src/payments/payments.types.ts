@@ -1,4 +1,4 @@
-import { PaymentMethod, PaymentStatus } from './constants';
+import { PAYMENT_METHOD, PAYMENT_STATUS } from './constants';
 
-export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus];
-export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod];
+export type PaymentStatus = (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
+export type PaymentMethod = (typeof PAYMENT_METHOD)[keyof typeof PAYMENT_METHOD];

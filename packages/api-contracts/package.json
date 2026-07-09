@@ -43,6 +43,10 @@
     "./payments": {
       "types": "./src/payments/index.ts",
       "import": "./src/payments/index.ts"
+    },
+    "./categories": {
+      "types": "./src/categories/index.ts",
+      "import": "./src/categories/index.ts"
     }
   },
   "devDependencies": {

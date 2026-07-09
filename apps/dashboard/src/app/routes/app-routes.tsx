@@ -9,6 +9,7 @@ import { GuestRoute } from '@/modules/auth/components/guest-route';
 import ForbiddenPage from '@/pages/forbidden';
 import { RoleGuard } from '@/modules/auth/components/role-guard';
 import { USER_ROLE } from '@srms/api-contracts';
+import CategoriesPage from '@/modules/categories/pages/categories-page';
 
 export default function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export default function AppRoutes() {
         <Route element={<RoleGuard allowedRoles={[USER_ROLE.ADMIN]} />}>
           <Route path="/" element={<DashboardPage />} />
         </Route>
+        <Route path="/categories" element={<CategoriesPage />} />
         <Route path="/403" element={<ForbiddenPage />} />
       </Route>
       <Route element={<GuestRoute />}>
