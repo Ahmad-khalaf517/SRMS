@@ -24,6 +24,10 @@ type PaginatedResult = {
   total: number;
 };
 
+export const findUserByName = async (name: string, restaurantId: string) => {
+  return UserModel.findOne({ name, restaurantId });
+};
+
 export const findUserByRestaurant = async (
   restaurantId: string,
   page: number,
