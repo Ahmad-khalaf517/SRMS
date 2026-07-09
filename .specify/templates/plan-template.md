@@ -41,10 +41,13 @@
 _GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 - Domain boundaries defined by business capability (no layer-first drift).
-- Shared contracts identified (types/schemas/enums/constants) and reused from packages.
-- Validation plan covers all external inputs with Zod (API, forms, query, env).
-- Auth and authorization rules explicitly captured for protected routes and permissions.
+- Shared contracts identified and located in `packages/api-contracts` (types/DTOs, schemas, route constants). No app-local DTO or schema duplication.
+- DTO naming follows `<Entity><Action>DTO` convention.
+- API call functions for this domain added to `packages/api-client/src/<domain>.ts`. Dashboard imports directly from `@srms/api-client`.
+- Validation plan covers all external inputs with Zod schemas from `packages/api-contracts`.
+- Auth and authorization rules explicitly captured; protected routes use `ProtectedRoute`; role-restricted routes additionally use `RoleGuard`.
 - State ownership split documented (TanStack Query for server state, Zustand for UI/session).
+- Session strategy declared (refresh token httpOnly cookie, access token in memory).
 - API envelope, AppError hierarchy, and structured logging strategy included.
 - Real-time requirements evaluated; Socket.IO preferred where immediacy is required.
 - Testing phase declared per domain (deferred-with-plan or required automated tests).

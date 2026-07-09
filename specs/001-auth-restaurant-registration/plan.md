@@ -14,7 +14,8 @@ Implement first-class authentication for SRMS with restaurant onboarding, owner 
 
 - Monorepo with pnpm workspaces.
 - Active applications: `apps/api`, `apps/dashboard`.
-- Active shared runtime packages: `packages/types`, `packages/validation`, `packages/api-client`, `packages/utils`, `packages/ui`.
+- Active shared runtime packages: `packages/api-contracts`, `packages/api-client`, `packages/utils`, `packages/ui`.
+- `packages/types` and `packages/validation` were retired and consolidated into `packages/api-contracts`.
 - API already has shared HTTP infrastructure (`response`, `middleware`, `AppError`, `logger`) and alias imports (`@/...`).
 - Dashboard already has auth UI pages/components shell (`modules/auth`) but no backend integration/state/session implementation.
 
@@ -23,8 +24,8 @@ Implement first-class authentication for SRMS with restaurant onboarding, owner 
 - No `apps/api/src/modules/auth` module exists yet.
 - No user/restaurant models or auth routes exist.
 - No JWT/bcrypt/auth middleware flow implemented.
-- Shared types currently include health/orders/payments/users role enums, but no auth request/response contracts.
-- Shared validation package has health/http schemas only; no login/register schemas.
+- Shared contracts are in `packages/api-contracts` which did not yet have auth domain entries (auth, user, restaurant domains).
+- Validation schemas did not yet exist for login/register.
 
 ### Dependencies Already Available
 
@@ -41,15 +42,15 @@ Implement first-class authentication for SRMS with restaurant onboarding, owner 
 
 ### Affected Shared Packages
 
-- `packages/types`: add feature contracts for restaurant, user auth profile, auth response, and role-related types.
-- `packages/validation`: add register/login schemas and reusable auth-related schema fragments.
+- `packages/api-contracts`: add auth domain types (DTOs), schemas, and route constants.
+- `packages/api-client`: add auth domain file `auth.ts` with all auth API call functions.
 - `packages/api-client`: add auth API methods and token-aware request utilities.
 
 ### Constitution Fit
 
-- Follows feature-driven ownership under `modules/auth`.
-- Reuses shared contracts from packages (no duplicate frontend/backend DTO definitions).
-- Keeps validation in `packages/validation` and role/domain constants in `packages/types` (no separate constants package).
+- Centralizes all contracts in `packages/api-contracts` (types, schemas, route constants) per constitution v1.1.0.
+- One api-client file per domain (`packages/api-client/src/auth.ts`) with all auth calls.
+- Dashboard imports api-client directly; no route URI duplication in dashboard modules.
 
 ## 3. Database Implementation Plan
 
@@ -172,19 +173,13 @@ Login:
 
 ## 6. Shared Packages Plan
 
-### `packages/types`
+### `packages/api-contracts`
 
-- Add feature folders for auth contracts:
-  - Restaurant type.
-  - User auth-safe type (no password).
-  - Auth response type.
-  - UserRole type alignment for ADMIN/CASHIER/KITCHEN_STAFF.
-
-### `packages/validation`
-
-- Add auth schemas:
-  - Register schema (restaurant + user nested payload).
-  - Login schema.
+- Add auth domain folder with:
+  - `auth.types.ts`: `LoginDTO`, `RegisterDTO`, `AuthUserDTO`, `AuthResponseDTO`, `RefreshResponseDTO`.
+  - `schemas.ts`: `LoginSchema`, `RegisterSchema` (Zod).
+  - `constants.ts`: `AUTH_ROUTES` URI constants.
+  - `index.ts`: barrel export.
 
 ### `packages/api-client`
 
@@ -196,8 +191,10 @@ Login:
 
 ### Constitutional Decision (Requested `packages/schemas` and `packages/constants`)
 
-- To comply with current constitution, auth schemas live in `packages/validation` and role/constants live in `packages/types` feature contracts.
-- No new `packages/schemas` or `packages/constants` package will be introduced.
+- Auth schemas and route constants live in `packages/api-contracts/src/auth`; role/domain
+  constants live in the same package under each feature domain.
+- `packages/api-client/src/auth.ts` contains all auth API call functions.
+- Dashboard modules import directly from `@srms/api-client`.
 
 ## 7. Security Plan
 
@@ -211,15 +208,14 @@ Login:
 
 ## 8. Implementation Order
 
-1. Add shared auth types in `packages/types`.
-2. Add shared auth schemas in `packages/validation`.
-3. Add/extend auth methods in `packages/api-client`.
-4. Create restaurant, user, and user-role models in API.
-5. Build `modules/auth` repository/service/controller/routes.
-6. Add JWT + bcrypt utilities and auth middleware.
-7. Integrate dashboard forms and API mutations.
-8. Add protected route handling and session store wiring.
-9. Run end-to-end integration validation and acceptance checks.
+1. Add auth domain contracts in `packages/api-contracts` (types, schemas, route constants).
+2. Add auth API calls in `packages/api-client/src/auth.ts`.
+3. Create restaurant, user, and user-role models in API.
+4. Build `modules/auth` repository/service/controller/routes.
+5. Add JWT + bcrypt utilities and auth middleware.
+6. Integrate dashboard forms and API mutations.
+7. Add protected route handling and session store wiring.
+8. Run end-to-end integration validation and acceptance checks.
 
 ## 9. Risks and Technical Decisions
 
@@ -327,14 +323,17 @@ apps/
         └── templates/
 
 packages/
+├── api-contracts/
+│   └── src/
+│       └── auth/      # types (DTOs), schemas, route constants
 ├── api-client/
-├── types/
-├── validation/
+│   └── src/
+│       └── auth.ts    # all auth API calls
 ├── ui/
 └── utils/
 ```
 
-**Structure Decision**: Continue the current monorepo feature-first architecture; add auth as first full business module in both API and dashboard while reusing shared packages for contracts.
+**Structure Decision**: Continue the current monorepo feature-first architecture; add auth as first full business module in both API and dashboard while reusing `packages/api-contracts` for all shared contracts and `packages/api-client` for all API call functions.
 
 ## Complexity Tracking
 

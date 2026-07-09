@@ -1,4 +1,24 @@
 <!-- This file mirrors .specify/memory/constitution.md and is the canonical constitutional reference path for the repository. -->
+<!--
+Sync Impact Report
+- Version change: 1.0.1 -> 1.1.0
+- Modified sections:
+  - Monorepo and Boundary Rules: replaced packages/types + packages/validation with packages/api-contracts; updated repo shape.
+  - Package Ownership Rules: removed packages/types and packages/validation entries; added packages/api-contracts.
+  - State, Validation, Security, and Data Rules: added session strategy (httpOnly cookie + memory), logout, DTO naming, and api-client usage rules.
+  - New subsection: Frontend Route Protection Rules (ProtectedRoute + RoleGuard).
+  - Naming, Coding, and Git Workflow: added DTO naming convention and API call placement rule.
+- Added sections:
+  - Frontend Route Protection Rules
+- Removed sections:
+  - None (packages/types and packages/validation entries removed from Package Ownership Rules)
+- Templates requiring updates:
+  - .specify/templates/plan-template.md: Constitution Check updated to reference api-contracts.
+  - .specify/templates/spec-template.md: Constitution Alignment updated.
+  - .specify/templates/tasks-template.md: Phase 1/2 guidance updated.
+- Follow-up TODOs:
+  - Update specs/001-auth-restaurant-registration/* to remove stale @srms/types and @srms/validation references.
+-->
 
 # Smart Restaurant Management System (SRMS) Constitution
 
@@ -103,19 +123,16 @@ srms/
     dashboard/
     # planned: kitchen/, customer/, delivery/
   packages/
+    api-contracts/   # unified domain contracts: types, schemas, route constants
+    api-client/      # one file per domain; all API calls for that domain
     ui/
-    types/
-    validation/
-    api-client/
     utils/
     typescript-config/
     eslint-config/
   .github/
 ```
 
-### Technology Standards
-
-Frontend baseline MUST use React, TypeScript, Vite, React Router, Tailwind CSS,
+`packages/types` and `packages/validation` are retired. All shared contracts now live in `packages/api-contracts`.
 shadcn/ui, React Hook Form, TanStack Query, Zustand, and Zod.
 
 Backend baseline MUST use Node.js, Express.js, TypeScript, MongoDB, Mongoose, JWT,
@@ -131,19 +148,24 @@ Shared tooling MUST include TypeScript, Zod, ESLint, and Prettier.
 
 Shared package responsibilities are mandatory:
 
-- packages/types: domain types, DTOs, and shared interfaces only; no implementation.
-- packages/validation: Zod schemas for request and response validation reused by all
-  apps.
+- packages/api-contracts: the single source of truth for all shared API contracts.
+  Each domain folder (auth, user, restaurant, orders, payments, http, health) MUST
+  contain three files: `<domain>.types.ts` for TypeScript types and DTOs,
+  `schemas.ts` for Zod validation schemas, and `constants.ts` for route URI
+  constants and business enums. An `index.ts` barrel exports everything from the
+  domain. No implementation logic is permitted here.
+- packages/api-client: one file per domain (e.g., `auth.ts`, `orders.ts`). Every
+  file MUST contain all API call functions for that domain. Frontend apps MUST import
+  directly from the package and MUST NOT re-declare route URIs or duplicate request
+  logic locally.
 - packages/ui: shared shadcn/ui components; feature-specific UI stays in feature
   modules.
-- packages/api-client: axios configuration, query helpers, and shared API functions
-  used by all frontend apps.
 - packages/utils: framework-independent pure helpers and formatting/calculation
   utilities.
 
-Business enums and shared business types MUST be organized by feature under
-packages/types/src/<feature> and MUST prefer const objects with literal types over
-TypeScript enums.
+Business enums and shared business types MUST be organized by feature domain under
+`packages/api-contracts/src/<domain>` and MUST prefer const objects with literal
+types over TypeScript enums.
 
 ### Frontend and Backend Structure Rules
 
@@ -177,14 +199,45 @@ own UI and session-oriented client state only. Server data MUST NOT be stored in
 Zustand.
 
 All external input MUST be validated with Zod, including API requests, form input,
-query parameters, and environment variables.
+query parameters, and environment variables. Validation schemas MUST live in
+`packages/api-contracts` and be reused by both apps; app-local duplicate schemas are
+prohibited.
 
 Authentication MUST use access token and refresh token patterns with JWT, secure
-cookies, token rotation, and refresh-token revocation. Passwords MUST be hashed with
-bcrypt.
+cookies, token rotation, and refresh-token revocation. The canonical session
+strategy is: refresh token stored in an httpOnly, Secure, SameSite=Lax cookie;
+access token held in memory only (never localStorage or sessionStorage). Logout MUST
+clear the refresh-token cookie server-side and clear all in-memory auth state
+client-side. Passwords MUST be hashed with bcrypt.
 
 Authorization MUST be role-based with explicit permissions on each protected route.
 Implicit permissions are prohibited.
+
+### Frontend Route Protection Rules
+
+Every route that requires authentication MUST be wrapped in a `ProtectedRoute`
+component. Every route that requires a specific role MUST additionally be wrapped in
+a `RoleGuard` component that accepts an `allowedRoles` prop. Unguarded access to
+authenticated or role-restricted pages is a constitution violation.
+
+The canonical pattern for route protection:
+
+```tsx
+<Route element={<ProtectedRoute />}>
+  <Route element={<RoleGuard allowedRoles={[UserRole.ADMIN]} />}>
+    <Route path="/admin" element={<AdminPage />} />
+  </Route>
+  <Route path="/dashboard" element={<DashboardPage />} />
+</Route>
+```
+
+ProtectedRoute checks session authentication. RoleGuard checks role membership
+from the session store and redirects to an unauthorized page on mismatch.
+
+Form UX MUST explicitly represent loading and error states. Form-level validation
+or submission failures SHOULD surface clear user-facing messages (inline field
+errors or alert). Unexpected or general request failures MUST trigger a global
+Sonner toast notification.
 
 MongoDB with Mongoose is the data standard. Core collections include users,
 categories, menuItems, kitchenSections, orders, payments, and auditLogs. Soft delete
@@ -226,6 +279,15 @@ code is prohibited. Sensitive data MUST never be logged.
 
 Naming conventions are mandatory: folders use kebab-case, components use PascalCase,
 variables use camelCase, and constants use UPPER_SNAKE_CASE.
+
+DTO naming MUST follow `<Entity><Action>DTO` convention (e.g., `CreateUserDTO`,
+`LoginDTO`, `RegisterRestaurantDTO`, `UpdateMenuItemDTO`). Request and response DTOs
+that cross the API boundary MUST be defined in `packages/api-contracts` and MUST be
+reused by both API and frontend apps without duplication.
+
+Frontend API call functions MUST live exclusively in `packages/api-client` organized
+by domain. Dashboard modules MUST import from `@srms/api-client` directly and MUST
+NOT declare route URI strings locally.
 
 Branching model MUST use main, develop, feature/_, and hotfix/_. Commit prefixes
 MUST use conventional tags: feat, fix, refactor, test, docs, style, perf, build,
@@ -293,4 +355,4 @@ Compliance policy:
 - Non-compliant changes MUST be blocked until addressed or explicitly waived.
 - Waivers MUST include owner, scope, expiration, and remediation plan.
 
-**Version**: 1.0.1 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-08
+**Version**: 1.1.0 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-09

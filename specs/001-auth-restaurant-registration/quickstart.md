@@ -60,12 +60,22 @@
 3. Authenticate successfully, then retry.
 4. Validate access is granted.
 
+## Scenario F: Logout (session teardown)
+
+1. Authenticate as any active user.
+2. Click Log out in the nav-user dropdown.
+3. Validate outcomes:
+   - Backend clears the `srms_refresh_token` httpOnly cookie.
+   - Client access token is removed from memory.
+   - Session store is cleared.
+   - Browser redirects to `/login`.
+
 ## Verification Commands
 
 - API typecheck: `pnpm --filter api typecheck`
 - Dashboard typecheck: `pnpm --filter dashboard typecheck`
-- Shared types typecheck: `pnpm --filter @srms/types typecheck`
-- Shared validation typecheck: `pnpm --filter @srms/validation typecheck`
+- API contracts typecheck: `pnpm --filter @srms/api-contracts typecheck`
+- API client typecheck: `pnpm --filter @srms/api-client typecheck`
 
 ## References
 

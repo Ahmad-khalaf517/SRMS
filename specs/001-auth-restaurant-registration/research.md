@@ -1,20 +1,21 @@
 # Phase 0 Research: SRMS Authentication and Restaurant Registration
 
-## Decision 1: Keep auth schemas in `packages/validation` (not a new schemas package)
+> **Architecture Amendment (2026-07-09)**: Decisions 1 and 2 below describe the
+> original design rationale. After implementation, `packages/types` and
+> `packages/validation` were retired and consolidated into a unified
+> `packages/api-contracts` package per constitution v1.1.0. All new features MUST
+> follow the api-contracts model described at the end of this document.
 
-- Decision: Add `register` and `login` schemas under `packages/validation/src/auth` and export them from `@srms/validation/auth`.
-- Rationale: Current constitution defines `packages/validation` as shared Zod home and disallows unnecessary package proliferation.
-- Alternatives considered:
-  - Create `packages/schemas`: rejected because it conflicts with current package ownership rules and increases cognitive overhead.
-  - Keep schemas app-local in API/dashboard: rejected due to duplication risk.
+## Decision 1 (superseded): Auth schemas initially in `packages/validation`
 
-## Decision 2: Keep role/auth constants in `packages/types` feature contracts
+- Decision: Add `register` and `login` schemas under `packages/validation/src/auth`.
+- Status: **Superseded**. Schemas are now in `packages/api-contracts/src/auth/schemas.ts`.
 
-- Decision: Define role and auth-related reusable value types/const objects in `packages/types/src/auth` and related feature folders.
-- Rationale: Constitution explicitly positions business enums/types in `packages/types` by feature.
-- Alternatives considered:
-  - Introduce `packages/constants`: rejected because constants package was intentionally removed and would reintroduce extra abstraction.
-  - Duplicate role literals in frontend/backend: rejected due to contract drift risk.
+## Decision 2 (superseded): Role/auth constants in `packages/types`
+
+- Decision: Define role and auth-related types/const objects in `packages/types/src/auth`.
+- Status: **Superseded**. Types are now in `packages/api-contracts/src/auth/auth.types.ts` and
+  `packages/api-contracts/src/user/user.types.ts`.
 
 ## Decision 3: Use transactional registration flow (restaurant + user)
 
@@ -60,3 +61,27 @@
 - Rationale: Constitution allows phased testing while requiring testable scenarios now.
 - Alternatives considered:
   - Full unit/integration/e2e suite immediately: deferred to avoid blocking feature foundation delivery.
+
+## Decision 9: Unified api-contracts package replaces types + validation (post-implementation)
+
+- Decision: Consolidate `packages/types` and `packages/validation` into `packages/api-contracts`,
+  organized by domain. Each domain folder contains `<domain>.types.ts`, `schemas.ts`, and `constants.ts`.
+- Rationale: Reduces import path complexity, co-locates related contracts, and removes the split between
+  type definitions and schemas that caused repeated synchronization errors. Constitutionally ratified as v1.1.0.
+- Impact on api-client: `packages/api-client` now has one file per domain (`auth.ts`, `orders.ts`, etc.)
+  containing all API call functions for that domain. Frontend apps import directly.
+
+## Decision 10: DTO naming convention
+
+- Decision: All DTOs that cross the API boundary MUST follow `<Entity><Action>DTO` naming
+  (e.g., `LoginDTO`, `CreateUserDTO`, `RegisterRestaurantDTO`).
+- Rationale: Distinguishes request/response transfer objects from domain model types and
+  improves discoverability across both apps.
+
+## Decision 11: Session strategy — httpOnly cookie + in-memory access token
+
+- Decision: Refresh token is stored in an httpOnly, Secure, SameSite=Lax cookie managed by the API.
+  Access token is held in memory only (Zustand store or closure). Logout calls `POST /auth/logout`
+  which clears the cookie server-side.
+- Rationale: Prevents XSS access to long-lived credentials; cookie transport handles refresh silently;
+  logout is explicit and server-enforced.

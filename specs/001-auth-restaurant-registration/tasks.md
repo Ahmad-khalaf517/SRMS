@@ -12,10 +12,10 @@
 
 **Purpose**: Prepare shared contracts and workspace plumbing required by authentication.
 
-- [ ] T001 Update auth dependency set in `apps/api/package.json` (add JWT + bcrypt runtime libraries and type packages if needed).
-- [ ] T002 Add auth package exports in `packages/types/package.json` for new auth feature entries.
-- [ ] T003 [P] Add auth package exports in `packages/validation/package.json` for register/login schema entries.
-- [ ] T004 [P] Add auth API surface entry points in `packages/api-client/src/index.ts` for dedicated auth methods.
+- [x] T001 Update auth dependency set in `apps/api/package.json` (add JWT, bcrypt, cookie-parser, cors runtime libraries and type packages).
+- [x] T002 Create `packages/api-contracts` package with domain folder structure (`src/auth`, `src/user`, `src/restaurant`, etc.).
+- [x] T003 [P] Add api-contracts package exports in `packages/api-contracts/package.json` for each domain.
+- [x] T004 [P] Add auth domain API call functions in `packages/api-client/src/auth.ts` and export from package root.
 
 ---
 
@@ -25,12 +25,12 @@
 
 **⚠️ CRITICAL**: No user story implementation should begin before this phase completes.
 
-- [ ] T005 Create auth shared feature types in `packages/types/src/auth/auth.types.ts` (Restaurant, User, UserRole assignment, AuthResponse, session-safe user payload).
-- [ ] T006 Export auth shared feature types from `packages/types/src/index.ts`.
-- [ ] T007 Create auth validation schemas in `packages/validation/src/auth/register.schema.ts` and `packages/validation/src/auth/login.schema.ts`.
-- [ ] T008 Export auth validation schemas from `packages/validation/src/index.ts`.
-- [ ] T009 [P] Add auth API client methods in `packages/api-client/src/auth.ts` (register/login/current-user foundation).
-- [ ] T010 Export auth API client methods from `packages/api-client/src/index.ts`.
+- [x] T005 Create auth DTOs in `packages/api-contracts/src/auth/auth.types.ts` (`LoginDTO`, `RegisterDTO`, `AuthUserDTO`, `AuthResponseDTO`, `RefreshResponseDTO`).
+- [x] T006 Export auth domain contracts from `packages/api-contracts/src/auth/index.ts` and package root.
+- [x] T007 Create auth validation schemas in `packages/api-contracts/src/auth/schemas.ts` (`LoginSchema`, `RegisterSchema`).
+- [x] T008 Create auth route constants in `packages/api-contracts/src/auth/constants.ts` (`AUTH_ROUTES`).
+- [x] T009 [P] Add auth API client methods in `packages/api-client/src/auth.ts` (register/login/refresh/logout/current-user).
+- [x] T010 Export auth API client methods from `packages/api-client/src/index.ts`.
 - [ ] T011 Create auth crypto/token utilities in `apps/api/src/modules/auth/utils/password.util.ts` and `apps/api/src/modules/auth/utils/token.util.ts`.
 - [ ] T012 Create auth repository layer with Restaurant/User/UserRole model definitions in `apps/api/src/modules/auth/repository/restaurant.repository.ts`, `apps/api/src/modules/auth/repository/user.repository.ts`, and `apps/api/src/modules/auth/repository/user-role.repository.ts`.
 - [ ] T013 Create auth module route/controller/service skeleton in `apps/api/src/modules/auth/routes/auth.routes.ts`, `apps/api/src/modules/auth/controller/auth.controller.ts`, and `apps/api/src/modules/auth/service/auth.service.ts`.
@@ -46,8 +46,8 @@
 
 **Independent Test**: Submit valid registration payload once and verify restaurant/user creation, ADMIN assignment, session token response, and dashboard redirect.
 
-- [ ] T015 [US1] Add register request/response auth feature types in `packages/types/src/auth/register.types.ts`.
-- [ ] T016 [US1] Implement register schema details (nested restaurant + user payload) in `packages/validation/src/auth/register.schema.ts`.
+- [x] T015 [US1] Add `RegisterDTO` and `RegisterResponseDTO` in `packages/api-contracts/src/auth/auth.types.ts`.
+- [x] T016 [US1] Implement register schema details (nested restaurant + user payload) in `packages/api-contracts/src/auth/schemas.ts`.
 - [ ] T017 [US1] Implement transactional restaurant creation flow in `apps/api/src/modules/auth/repository/restaurant.repository.ts`.
 - [ ] T018 [US1] Implement user uniqueness lookup plus first ADMIN user-role assignment behavior in `apps/api/src/modules/auth/repository/user.repository.ts` and `apps/api/src/modules/auth/repository/user-role.repository.ts`.
 - [ ] T019 [US1] Implement register workflow service (validate, unique check, transaction, hash, create user, create ADMIN user-role, token issue) in `apps/api/src/modules/auth/service/auth.service.ts`.
@@ -67,8 +67,8 @@
 
 **Independent Test**: Log in with valid credentials and invalid/inactive credentials, confirming correct success/error behavior and redirect logic.
 
-- [ ] T025 [US2] Add login request/response auth feature types in `packages/types/src/auth/login.types.ts`.
-- [ ] T026 [US2] Implement login schema details in `packages/validation/src/auth/login.schema.ts`.
+- [x] T025 [US2] Add `LoginDTO` and `LoginResponseDTO` in `packages/api-contracts/src/auth/auth.types.ts`.
+- [x] T026 [US2] Implement login schema details in `packages/api-contracts/src/auth/schemas.ts`.
 - [ ] T027 [US2] Implement password verification, inactive-user blocking, and active user-role lookup in `apps/api/src/modules/auth/service/auth.service.ts`.
 - [ ] T028 [US2] Implement `POST /auth/login` controller + route behavior in `apps/api/src/modules/auth/controller/auth.controller.ts` and `apps/api/src/modules/auth/routes/auth.routes.ts`.
 - [ ] T029 [P] [US2] Implement login API client/mutation in `apps/dashboard/src/modules/auth/api/login.ts` and `apps/dashboard/src/modules/auth/hooks/use-login.ts`.
@@ -100,10 +100,13 @@
 
 **Purpose**: Final hardening, docs alignment, and validation for handoff.
 
-- [ ] T038 [P] Update feature quickstart verification steps in `specs/001-auth-restaurant-registration/quickstart.md` for final auth behavior.
-- [ ] T039 [P] Update API environment variable documentation in `apps/api/README.md` (or root `README.md` if API env lives there).
-- [ ] T040 Perform security hardening pass for token/cookie settings and response redaction in `apps/api/src/modules/auth/utils/token.util.ts` and `apps/api/src/shared/logging/logger.ts`.
-- [ ] T041 Run acceptance and typecheck validation commands and record results in `specs/001-auth-restaurant-registration/quickstart.md`.
+- [x] T038 [P] Update feature quickstart verification steps in `specs/001-auth-restaurant-registration/quickstart.md` for final auth behavior including logout scenario F.
+- [x] T039 [P] Update API environment variable documentation in root `README.md`.
+- [x] T040 Perform security hardening pass for token/cookie settings and response redaction in `apps/api/src/modules/auth/utils/token.util.ts` and `apps/api/src/shared/logging/logger.ts`.
+- [x] T041 Run acceptance and typecheck validation commands and record results.
+- [x] T042 Implement `POST /auth/logout` endpoint that clears `srms_refresh_token` httpOnly cookie (API controller + route).
+- [x] T043 Implement `useLogout` hook in dashboard that calls logout API, clears access token from memory, clears session store, and redirects to `/login`.
+- [x] T044 Wire Log out item in `apps/dashboard/src/components/nav-user.tsx` to `useLogout` hook with loading and disabled states.
 
 ---
 

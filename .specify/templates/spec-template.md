@@ -106,9 +106,9 @@ _Example of marking unclear requirements:_
 ## Constitution Alignment _(mandatory)_
 
 - **Domain Ownership**: [Which domain/module owns this feature and why]
-- **Shared Contracts**: [Types/schemas/enums/constants reused or added in shared packages]
-- **Validation Coverage**: [All external inputs and their Zod validation points]
-- **AuthN/AuthZ Impact**: [Access model, roles, permissions, protected routes]
+- **Shared Contracts**: [Types/DTOs, schemas, route constants added or reused in `packages/api-contracts/<domain>`; API calls added to `packages/api-client/src/<domain>.ts`]
+- **Validation Coverage**: [All external inputs validated via Zod schemas from `packages/api-contracts`]
+- **AuthN/AuthZ Impact**: [Access model, roles, permissions; protected routes use ProtectedRoute; role-restricted routes use RoleGuard]
 - **State Ownership**: [TanStack Query vs Zustand boundaries]
 - **API and Errors**: [Response envelope and AppError types used]
 - **Testing Phase Declaration**: [Deferred-with-plan or automated tests required now]

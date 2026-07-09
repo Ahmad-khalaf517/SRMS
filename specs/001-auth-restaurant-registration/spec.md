@@ -95,9 +95,9 @@ Authenticated users can access protected application areas while unauthenticated
 ## Constitution Alignment _(mandatory)_
 
 - **Domain Ownership**: Feature is owned by `modules/auth` in both API and dashboard; auth-specific flows remain in-domain while shared concerns stay in shared packages.
-- **Shared Contracts**: Add or extend shared auth and entity types under `packages/types/src/<feature>` and shared input schemas under `packages/validation`; avoid creating a separate constants package.
+- **Shared Contracts**: Auth types (DTOs), schemas, and route constants are defined in `packages/api-contracts/src/auth`; user and restaurant types are in their respective domain folders. No app-local duplication.
 - **Validation Coverage**: Validate register payload (restaurant + user), login payload, and any auth middleware inputs at all API boundaries.
-- **AuthN/AuthZ Impact**: Introduces registration, login, session issuance, authentication middleware, current-user context, and role-ready authorization foundations.
+- **AuthN/AuthZ Impact**: Introduces registration, login, refresh, logout, session issuance, authentication middleware, current-user context, ProtectedRoute, and RoleGuard-ready authorization foundations. All auth routes on the backend use `authenticate` + `authorize` middleware. All protected frontend routes use `ProtectedRoute`; role-restricted routes additionally use `RoleGuard`.
 - **State Ownership**: TanStack Query handles auth API calls/session fetches; Zustand stores only client session/UI state derived from authenticated context.
 - **API and Errors**: Use standard success/error envelopes and typed AppError variants for validation, unauthorized, forbidden, conflict, and not-found behaviors.
 - **Testing Phase Declaration**: Deferred-with-plan for full automation is acceptable at this phase, but acceptance scenarios must be executable and documented for register/login/protected-route flows.
@@ -122,6 +122,6 @@ Authenticated users can access protected application areas while unauthenticated
 
 - SRMS currently supports one restaurant onboarding owner flow per initial setup; invitation-based multi-user onboarding is handled later.
 - Session strategy uses access + refresh token concepts aligned with current constitution and existing security conventions.
-- Shared auth schemas will be maintained in `packages/validation` (not a separate `packages/schemas` package) to match current repository standards.
-- Role constants and role-related shared types will be maintained under `packages/types` feature folders (not a separate constants package).
+- Shared auth contracts are defined in `packages/api-contracts/src/auth` (DTOs, schemas, route constants) following constitution v1.1.0.
+- All auth API calls are exposed via `packages/api-client/src/auth.ts`; dashboard modules import directly.
 - Redirect target after successful authentication is dashboard home (`/` in dashboard app routing context).

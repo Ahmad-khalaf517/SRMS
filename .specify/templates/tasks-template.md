@@ -48,9 +48,9 @@ description: 'Task list template for feature implementation'
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T001 Create/update `packages/api-contracts/src/<domain>/` with `<domain>.types.ts` (DTOs), `schemas.ts` (Zod), `constants.ts` (route URIs + enums), and `index.ts` barrel.
+- [ ] T002 Add API call functions for this domain in `packages/api-client/src/<domain>.ts` and export from package root.
+- [ ] T003 [P] Update package.json exports in `packages/api-contracts` and `packages/api-client`.
 
 ---
 
