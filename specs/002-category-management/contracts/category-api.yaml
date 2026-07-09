@@ -1,0 +1,214 @@
+openapi: "3.1.0"
+info:
+  title: SRMS Category API
+  version: "1.0"
+  description: Category management endpoints for SRMS restaurants.
+
+tags:
+  - name: categories
+
+paths:
+  /api/v1/categories:
+    get:
+      summary: List categories for the authenticated user's restaurant
+      tags: [categories]
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 100, default: 10 }
+      responses:
+        "200":
+          description: Paginated category list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+    post:
+      summary: Create a new category (Admin only)
+      tags: [categories]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCategoryRequest"
+      responses:
+        "201":
+          description: Category created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /api/v1/categories/{id}:
+    patch:
+      summary: Update a category (Admin only)
+      tags: [categories]
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCategoryRequest"
+      responses:
+        "200":
+          description: Category updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+    delete:
+      summary: Delete a category (Admin only)
+      tags: [categories]
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Category deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Category:
+      type: object
+      properties:
+        id:        { type: string }
+        name:      { type: string }
+        description: { type: string, nullable: true }
+        restaurantId: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+      required: [id, name, restaurantId, createdAt, updatedAt]
+
+    PaginationMeta:
+      type: object
+      properties:
+        page:       { type: integer }
+        limit:      { type: integer }
+        total:      { type: integer }
+        totalPages: { type: integer }
+      required: [page, limit, total, totalPages]
+
+    CreateCategoryRequest:
+      type: object
+      properties:
+        name:        { type: string, minLength: 2, maxLength: 100 }
+        description: { type: string, maxLength: 500 }
+      required: [name]
+
+    UpdateCategoryRequest:
+      type: object
+      properties:
+        name:        { type: string, minLength: 2, maxLength: 100 }
+        description: { type: string, maxLength: 500 }
+      minProperties: 1
+
+    CategoryResponse:
+      type: object
+      properties:
+        success: { type: boolean, enum: [true] }
+        message: { type: string }
+        data:    { $ref: "#/components/schemas/Category" }
+
+    CategoryListResponse:
+      type: object
+      properties:
+        success: { type: boolean, enum: [true] }
+        message: { type: string }
+        data:
+          type: object
+          properties:
+            data:
+              type: array
+              items: { $ref: "#/components/schemas/Category" }
+            pagination: { $ref: "#/components/schemas/PaginationMeta" }
+
+    SuccessResponse:
+      type: object
+      properties:
+        success: { type: boolean, enum: [true] }
+        message: { type: string }
+        data:    {}
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid access token
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/SuccessResponse" }
+    Forbidden:
+      description: Authenticated user lacks required role
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/SuccessResponse" }
+    NotFound:
+      description: Category not found in this restaurant
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/SuccessResponse" }
+    Conflict:
+      description: Category name already exists in this restaurant
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/SuccessResponse" }
+    ValidationError:
+      description: Request body failed validation
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/SuccessResponse" }
