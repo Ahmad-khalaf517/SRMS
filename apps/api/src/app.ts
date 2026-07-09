@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import healthRoutes from '@/modules/health/routes/health.routes';
 import authRoutes from '@/modules/auth/routes/auth.routes';
+import categoryRoutes from '@/modules/categories/routes/category.routes';
 import { errorHandler, requestLogger, notFoundHandler } from '@/shared/http/middleware/index';
 import { env } from '@/config/env';
 
@@ -31,6 +32,7 @@ app.use(requestLogger);
 // Register routes
 app.use(BASE_URL, healthRoutes);
 app.use(BASE_URL, authRoutes);
+app.use(BASE_URL, categoryRoutes);
 
 // 404 handler
 app.use(notFoundHandler);

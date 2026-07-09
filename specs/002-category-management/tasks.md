@@ -21,14 +21,14 @@ Frontend must cover list rendering, pagination, admin action visibility, form va
 
 **Purpose**: Add shared contracts and API client functions that all other phases depend on.
 
-- [ ] T001 Add `packages/api-contracts/src/categories/category.types.ts` — export `Category`, `CreateCategoryDTO`, `UpdateCategoryDTO`, `CategoryList`, `PaginationMeta`, `CategoryResponse`, `CategoryListResponse`
-- [ ] T002 [P] Add `packages/api-contracts/src/categories/schemas.ts` — export `CreateCategorySchema` (name trim min 2 max 100, description trim max 500 optional), `UpdateCategorySchema` (both optional, refine at least one), re-export `PaginationQuerySchema` as `CategoryQuerySchema`
-- [ ] T003 [P] Add `packages/api-contracts/src/categories/constants.ts` — export `CATEGORY_ENDPOINTS = { BASE: '/categories', BY_ID: (id) => '/categories/${id}' }`
-- [ ] T004 Add `packages/api-contracts/src/categories/index.ts` barrel — `export * from './category.types'; export * from './schemas'; export * from './constants'`
-- [ ] T005 Update `packages/api-contracts/src/index.ts` — add `export * from './categories'`
-- [ ] T006 Update `packages/api-contracts/package.json` exports — add `./categories` entry pointing to `./src/categories/index.ts`
-- [ ] T007 Add `packages/api-client/src/categories.ts` — export `getCategories(client, params)`, `createCategory(client, payload)`, `updateCategory(client, id, payload)`, `deleteCategory(client, id)` using `CATEGORY_ENDPOINTS`
-- [ ] T008 Update `packages/api-client/src/index.ts` — add `export * from './categories.js'`
+- - [x] T001 Add `packages/api-contracts/src/categories/category.types.ts` — export `Category`, `CreateCategoryDTO`, `UpdateCategoryDTO`, `CategoryList`, `PaginationMeta`, `CategoryResponse`, `CategoryListResponse`.Value -replace '\[ \]', '[X]' Add `packages/api-contracts/src/categories/category.types.ts` — export `Category`, `CreateCategoryDTO`, `UpdateCategoryDTO`, `CategoryList`, `PaginationMeta`, `CategoryResponse`, `CategoryListResponse`
+- - [x] T002 [P] Add `packages/api-contracts/src/categories/schemas.ts` — export `CreateCategorySchema` (name trim min 2 max 100, description trim max 500 optional), `UpdateCategorySchema` (both optional, refine at least one), re-export `PaginationQuerySchema` as `CategoryQuerySchema`.Value -replace '\[ \]', '[X]' [P] Add `packages/api-contracts/src/categories/schemas.ts` — export `CreateCategorySchema` (name trim min 2 max 100, description trim max 500 optional), `UpdateCategorySchema` (both optional, refine at least one), re-export `PaginationQuerySchema` as `CategoryQuerySchema`
+- - [x] T003 [P] Add `packages/api-contracts/src/categories/constants.ts` — export `CATEGORY_ENDPOINTS = { BASE: '/categories', BY_ID: (id) => '/categories/${id}' }`.Value -replace '\[ \]', '[X]' [P] Add `packages/api-contracts/src/categories/constants.ts` — export `CATEGORY_ENDPOINTS = { BASE: '/categories', BY_ID: (id) => '/categories/${id}' }`
+- - [x] T004 Add `packages/api-contracts/src/categories/index.ts` barrel — `export * from './category.types'; export * from './schemas'; export * from './constants'`.Value -replace '\[ \]', '[X]' Add `packages/api-contracts/src/categories/index.ts` barrel — `export * from './category.types'; export * from './schemas'; export * from './constants'`
+- - [x] T005 Update `packages/api-contracts/src/index.ts` — add `export * from './categories'`.Value -replace '\[ \]', '[X]' Update `packages/api-contracts/src/index.ts` — add `export * from './categories'`
+- - [x] T006 Update `packages/api-contracts/package.json` exports — add `./categories` entry pointing to `./src/categories/index.ts`.Value -replace '\[ \]', '[X]' Update `packages/api-contracts/package.json` exports — add `./categories` entry pointing to `./src/categories/index.ts`
+- - [x] T007 Add `packages/api-client/src/categories.ts` — export `getCategories(client, params)`, `createCategory(client, payload)`, `updateCategory(client, id, payload)`, `deleteCategory(client, id)` using `CATEGORY_ENDPOINTS`.Value -replace '\[ \]', '[X]' Add `packages/api-client/src/categories.ts` — export `getCategories(client, params)`, `createCategory(client, payload)`, `updateCategory(client, id, payload)`, `deleteCategory(client, id)` using `CATEGORY_ENDPOINTS`
+- - [x] T008 Update `packages/api-client/src/index.ts` — add `export * from './categories.js'`.Value -replace '\[ \]', '[X]' Update `packages/api-client/src/index.ts` — add `export * from './categories.js'`
 
 **Checkpoint**: `pnpm --filter @srms/api-contracts typecheck` and `pnpm --filter @srms/api-client typecheck` both pass. Shared contracts ready; all phases can proceed.
 
@@ -40,11 +40,11 @@ Frontend must cover list rendering, pagination, admin action visibility, form va
 
 **⚠️ CRITICAL**: No user story API phase should begin before this phase completes.
 
-- [ ] T009 Add `apps/api/src/modules/categories/repository/category.repository.ts` — Mongoose schema, model, indexes (`{ restaurantId: 1 }`, `{ restaurantId: 1, createdAt: -1 }`, `{ name: 1, restaurantId: 1 }` unique), and functions: `findCategoriesByRestaurant`, `findCategoryById`, `findCategoryByName`, `createCategory`, `updateCategoryById`, `deleteCategoryById`
-- [ ] T010 Add `apps/api/src/modules/categories/service/category.service.ts` — implement `listCategories`, `createCategory` (trim + duplicate check), `updateCategory` (404 guard + self-exclusion duplicate check), `deleteCategory` (404 guard); import DTOs from `@srms/api-contracts`
-- [ ] T011 Add `apps/api/src/modules/categories/controller/category.controller.ts` — `listCategoriesController`, `createCategoryController`, `updateCategoryController`, `deleteCategoryController`; extract `auth.restaurantId` from `req.auth`; call `sendSuccess`; delegate errors via `next`
-- [ ] T012 Add `apps/api/src/modules/categories/routes/category.routes.ts` — wire routes: GET `/categories` (`authenticate`, `validate({ query })`), POST `/categories` (`authenticate`, `authorize([ADMIN])`, `validate({ body })`), PATCH `/categories/:id` (`authenticate`, `authorize([ADMIN])`, `validate({ body })`), DELETE `/categories/:id` (`authenticate`, `authorize([ADMIN])`)
-- [ ] T013 Update `apps/api/src/app.ts` — import `categoryRoutes` and add `app.use(BASE_URL, categoryRoutes)`
+- - [x] T009 Add `apps/api/src/modules/categories/repository/category.repository.ts` — Mongoose schema, model, indexes (`{ restaurantId: 1 }`, `{ restaurantId: 1, createdAt: -1 }`, `{ name: 1, restaurantId: 1 }` unique), and functions: `findCategoriesByRestaurant`, `findCategoryById`, `findCategoryByName`, `createCategory`, `updateCategoryById`, `deleteCategoryById`.Value -replace '\[ \]', '[X]' Add `apps/api/src/modules/categories/repository/category.repository.ts` — Mongoose schema, model, indexes (`{ restaurantId: 1 }`, `{ restaurantId: 1, createdAt: -1 }`, `{ name: 1, restaurantId: 1 }` unique), and functions: `findCategoriesByRestaurant`, `findCategoryById`, `findCategoryByName`, `createCategory`, `updateCategoryById`, `deleteCategoryById`
+- - [x] T010 Add `apps/api/src/modules/categories/service/category.service.ts` — implement `listCategories`, `createCategory` (trim + duplicate check), `updateCategory` (404 guard + self-exclusion duplicate check), `deleteCategory` (404 guard); import DTOs from `@srms/api-contracts`.Value -replace '\[ \]', '[X]' Add `apps/api/src/modules/categories/service/category.service.ts` — implement `listCategories`, `createCategory` (trim + duplicate check), `updateCategory` (404 guard + self-exclusion duplicate check), `deleteCategory` (404 guard); import DTOs from `@srms/api-contracts`
+- - [x] T011 Add `apps/api/src/modules/categories/controller/category.controller.ts` — `listCategoriesController`, `createCategoryController`, `updateCategoryController`, `deleteCategoryController`; extract `auth.restaurantId` from `req.auth`; call `sendSuccess`; delegate errors via `next`.Value -replace '\[ \]', '[X]' Add `apps/api/src/modules/categories/controller/category.controller.ts` — `listCategoriesController`, `createCategoryController`, `updateCategoryController`, `deleteCategoryController`; extract `auth.restaurantId` from `req.auth`; call `sendSuccess`; delegate errors via `next`
+- - [x] T012 Add `apps/api/src/modules/categories/routes/category.routes.ts` — wire routes: GET `/categories` (`authenticate`, `validate({ query })`), POST `/categories` (`authenticate`, `authorize([ADMIN])`, `validate({ body })`), PATCH `/categories/:id` (`authenticate`, `authorize([ADMIN])`, `validate({ body })`), DELETE `/categories/:id` (`authenticate`, `authorize([ADMIN])`).Value -replace '\[ \]', '[X]' Add `apps/api/src/modules/categories/routes/category.routes.ts` — wire routes: GET `/categories` (`authenticate`, `validate({ query })`), POST `/categories` (`authenticate`, `authorize([ADMIN])`, `validate({ body })`), PATCH `/categories/:id` (`authenticate`, `authorize([ADMIN])`, `validate({ body })`), DELETE `/categories/:id` (`authenticate`, `authorize([ADMIN])`)
+- - [x] T013 Update `apps/api/src/app.ts` — import `categoryRoutes` and add `app.use(BASE_URL, categoryRoutes)`.Value -replace '\[ \]', '[X]' Update `apps/api/src/app.ts` — import `categoryRoutes` and add `app.use(BASE_URL, categoryRoutes)`
 
 **Checkpoint**: `pnpm --filter api typecheck` passes. Manual smoke-test with `curl` or HTTP client confirms 401 on unauthenticated request and 403 on non-admin write attempt.
 
@@ -58,15 +58,15 @@ Frontend must cover list rendering, pagination, admin action visibility, form va
 
 ### Tests for User Story 1
 
-- [ ] T014 [P] [US1] Backend integration test — `GET /categories` returns only categories for the authenticated user's restaurant; verifies pagination metadata (`total`, `totalPages`); verifies empty array for restaurant with no categories
-- [ ] T015 [P] [US1] Backend integration test — `GET /categories` with another restaurant's categories in DB returns empty data (restaurant isolation)
+- - [x] T014 [P] [US1] Backend integration test — `GET /categories` returns only categories for the authenticated user's restaurant; verifies pagination metadata (`total`, `totalPages`); verifies empty array for restaurant with no categories.Value -replace '\[ \]', '[X]' [P] [US1] Backend integration test — `GET /categories` returns only categories for the authenticated user's restaurant; verifies pagination metadata (`total`, `totalPages`); verifies empty array for restaurant with no categories
+- - [x] T015 [P] [US1] Backend integration test — `GET /categories` with another restaurant's categories in DB returns empty data (restaurant isolation).Value -replace '\[ \]', '[X]' [P] [US1] Backend integration test — `GET /categories` with another restaurant's categories in DB returns empty data (restaurant isolation)
 
 ### Implementation for User Story 1
 
-- [ ] T016 [P] [US1] Add `apps/dashboard/src/modules/categories/api/index.ts` — export thin wrappers: `getCategoriesRequest`, `createCategoryRequest`, `updateCategoryRequest`, `deleteCategoryRequest`; bind `authApiClient` from `@/modules/auth/api/client`
-- [ ] T017 [US1] Add `apps/dashboard/src/modules/categories/hooks/use-categories.ts` — `useQuery({ queryKey: ['categories', { page, limit }], queryFn: getCategoriesRequest })`
-- [ ] T018 [US1] Add `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — renders paginated table with columns Name, Description, Created Date, Actions; handles loading (skeleton), empty (admin shows create CTA; non-admin shows plain message), error (retry button), data states; reads `user.role` from `useAuthSessionStore` for admin detection
-- [ ] T019 [US1] Update `apps/dashboard/src/app/routes/app-routes.tsx` — add `/categories` route inside `<ProtectedRoute />` block (not inside `RoleGuard`)
+- - [x] T016 [P] [US1] Add `apps/dashboard/src/modules/categories/api/index.ts` — export thin wrappers: `getCategoriesRequest`, `createCategoryRequest`, `updateCategoryRequest`, `deleteCategoryRequest`; bind `authApiClient` from `@/modules/auth/api/client`.Value -replace '\[ \]', '[X]' [P] [US1] Add `apps/dashboard/src/modules/categories/api/index.ts` — export thin wrappers: `getCategoriesRequest`, `createCategoryRequest`, `updateCategoryRequest`, `deleteCategoryRequest`; bind `authApiClient` from `@/modules/auth/api/client`
+- - [x] T017 [US1] Add `apps/dashboard/src/modules/categories/hooks/use-categories.ts` — `useQuery({ queryKey: ['categories', { page, limit }], queryFn: getCategoriesRequest })`.Value -replace '\[ \]', '[X]' [US1] Add `apps/dashboard/src/modules/categories/hooks/use-categories.ts` — `useQuery({ queryKey: ['categories', { page, limit }], queryFn: getCategoriesRequest })`
+- - [x] T018 [US1] Add `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — renders paginated table with columns Name, Description, Created Date, Actions; handles loading (skeleton), empty (admin shows create CTA; non-admin shows plain message), error (retry button), data states; reads `user.role` from `useAuthSessionStore` for admin detection.Value -replace '\[ \]', '[X]' [US1] Add `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — renders paginated table with columns Name, Description, Created Date, Actions; handles loading (skeleton), empty (admin shows create CTA; non-admin shows plain message), error (retry button), data states; reads `user.role` from `useAuthSessionStore` for admin detection
+- - [x] T019 [US1] Update `apps/dashboard/src/app/routes/app-routes.tsx` — add `/categories` route inside `<ProtectedRoute />` block (not inside `RoleGuard`).Value -replace '\[ \]', '[X]' [US1] Update `apps/dashboard/src/app/routes/app-routes.tsx` — add `/categories` route inside `<ProtectedRoute />` block (not inside `RoleGuard`)
 
 **Checkpoint**: User Story 1 is independently functional — authenticated users can view the category list end-to-end.
 
@@ -80,16 +80,16 @@ Frontend must cover list rendering, pagination, admin action visibility, form va
 
 ### Tests for User Story 2
 
-- [ ] T020 [P] [US2] Backend integration test — `POST /categories` with valid payload creates category and returns 201 with `CategoryResponse` envelope; name is stored trimmed
-- [ ] T021 [P] [US2] Backend integration test — `POST /categories` with duplicate name (case/trim variants) returns 409 Conflict
-- [ ] T022 [P] [US2] Backend integration test — `POST /categories` as Cashier/Kitchen Staff returns 403 Forbidden
+- - [x] T020 [P] [US2] Backend integration test — `POST /categories` with valid payload creates category and returns 201 with `CategoryResponse` envelope; name is stored trimmed.Value -replace '\[ \]', '[X]' [P] [US2] Backend integration test — `POST /categories` with valid payload creates category and returns 201 with `CategoryResponse` envelope; name is stored trimmed
+- - [x] T021 [P] [US2] Backend integration test — `POST /categories` with duplicate name (case/trim variants) returns 409 Conflict.Value -replace '\[ \]', '[X]' [P] [US2] Backend integration test — `POST /categories` with duplicate name (case/trim variants) returns 409 Conflict
+- - [x] T022 [P] [US2] Backend integration test — `POST /categories` as Cashier/Kitchen Staff returns 403 Forbidden.Value -replace '\[ \]', '[X]' [P] [US2] Backend integration test — `POST /categories` as Cashier/Kitchen Staff returns 403 Forbidden
 
 ### Implementation for User Story 2
 
-- [ ] T023 [P] [US2] Add `apps/dashboard/src/modules/categories/schemas/category-form.schema.ts` — export `CategoryFormSchema` (wraps `CreateCategorySchema`), `CategoryFormValues` type, and `EditCategoryFormSchema` (wraps `UpdateCategorySchema`)
-- [ ] T024 [P] [US2] Add `apps/dashboard/src/modules/categories/components/category-form.tsx` — React Hook Form + `zodResolver`; `name` (required) + `description` (optional textarea); inline field errors; submit button disabled + shows "Saving…" while pending; `onSuccess` callback prop; `onError` calls `toast.error(getErrorMessage(error))`; supports both create and edit via `defaultValues` prop
-- [ ] T025 [US2] Add `apps/dashboard/src/modules/categories/hooks/use-create-category.ts` — `useMutation({ mutationFn: createCategoryRequest })`; `onSuccess`: `toast.success('Category created')`, invalidate `['categories']`; `onError`: `toast.error(getErrorMessage(error))`
-- [ ] T026 [US2] Update `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — add create dialog (controlled with `useState`); show "New Category" button only when `isAdmin`; wire `use-create-category` hook to `category-form`
+- - [x] T023 [P] [US2] Add `apps/dashboard/src/modules/categories/schemas/category-form.schema.ts` — export `CategoryFormSchema` (wraps `CreateCategorySchema`), `CategoryFormValues` type, and `EditCategoryFormSchema` (wraps `UpdateCategorySchema`).Value -replace '\[ \]', '[X]' [P] [US2] Add `apps/dashboard/src/modules/categories/schemas/category-form.schema.ts` — export `CategoryFormSchema` (wraps `CreateCategorySchema`), `CategoryFormValues` type, and `EditCategoryFormSchema` (wraps `UpdateCategorySchema`)
+- - [x] T024 [P] [US2] Add `apps/dashboard/src/modules/categories/components/category-form.tsx` — React Hook Form + `zodResolver`; `name` (required) + `description` (optional textarea); inline field errors; submit button disabled + shows "Saving…" while pending; `onSuccess` callback prop; `onError` calls `toast.error(getErrorMessage(error))`; supports both create and edit via `defaultValues` prop.Value -replace '\[ \]', '[X]' [P] [US2] Add `apps/dashboard/src/modules/categories/components/category-form.tsx` — React Hook Form + `zodResolver`; `name` (required) + `description` (optional textarea); inline field errors; submit button disabled + shows "Saving…" while pending; `onSuccess` callback prop; `onError` calls `toast.error(getErrorMessage(error))`; supports both create and edit via `defaultValues` prop
+- - [x] T025 [US2] Add `apps/dashboard/src/modules/categories/hooks/use-create-category.ts` — `useMutation({ mutationFn: createCategoryRequest })`; `onSuccess`: `toast.success('Category created')`, invalidate `['categories']`; `onError`: `toast.error(getErrorMessage(error))`.Value -replace '\[ \]', '[X]' [US2] Add `apps/dashboard/src/modules/categories/hooks/use-create-category.ts` — `useMutation({ mutationFn: createCategoryRequest })`; `onSuccess`: `toast.success('Category created')`, invalidate `['categories']`; `onError`: `toast.error(getErrorMessage(error))`
+- - [x] T026 [US2] Update `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — add create dialog (controlled with `useState`); show "New Category" button only when `isAdmin`; wire `use-create-category` hook to `category-form`.Value -replace '\[ \]', '[X]' [US2] Update `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — add create dialog (controlled with `useState`); show "New Category" button only when `isAdmin`; wire `use-create-category` hook to `category-form`
 
 **Checkpoint**: Admin can complete full create flow; non-admin sees no create button and API rejects direct attempts with 403.
 
@@ -103,14 +103,14 @@ Frontend must cover list rendering, pagination, admin action visibility, form va
 
 ### Tests for User Story 3
 
-- [ ] T027 [P] [US3] Backend integration test — `PATCH /categories/:id` with valid payload updates and returns 200 with updated `CategoryResponse`
-- [ ] T028 [P] [US3] Backend integration test — `PATCH /categories/:id` where name matches another category in same restaurant returns 409; same name as self succeeds (no false conflict)
-- [ ] T029 [P] [US3] Backend integration test — `PATCH /categories/:id` where category belongs to different restaurant returns 404
+- - [x] T027 [P] [US3] Backend integration test — `PATCH /categories/:id` with valid payload updates and returns 200 with updated `CategoryResponse`.Value -replace '\[ \]', '[X]' [P] [US3] Backend integration test — `PATCH /categories/:id` with valid payload updates and returns 200 with updated `CategoryResponse`
+- - [x] T028 [P] [US3] Backend integration test — `PATCH /categories/:id` where name matches another category in same restaurant returns 409; same name as self succeeds (no false conflict).Value -replace '\[ \]', '[X]' [P] [US3] Backend integration test — `PATCH /categories/:id` where name matches another category in same restaurant returns 409; same name as self succeeds (no false conflict)
+- - [x] T029 [P] [US3] Backend integration test — `PATCH /categories/:id` where category belongs to different restaurant returns 404.Value -replace '\[ \]', '[X]' [P] [US3] Backend integration test — `PATCH /categories/:id` where category belongs to different restaurant returns 404
 
 ### Implementation for User Story 3
 
-- [ ] T030 [US3] Add `apps/dashboard/src/modules/categories/hooks/use-update-category.ts` — `useMutation({ mutationFn: ({ id, payload }) => updateCategoryRequest(id, payload) })`; `onSuccess`: `toast.success('Category updated')`, invalidate `['categories']`; `onError`: `toast.error(getErrorMessage(error))`
-- [ ] T031 [US3] Update `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — add edit dialog (controlled with `useState` + selected category state); show Edit action in table row only when `isAdmin`; wire `use-update-category` hook; pass existing category data as `defaultValues` to `category-form`
+- - [x] T030 [US3] Add `apps/dashboard/src/modules/categories/hooks/use-update-category.ts` — `useMutation({ mutationFn: ({ id, payload }) => updateCategoryRequest(id, payload) })`; `onSuccess`: `toast.success('Category updated')`, invalidate `['categories']`; `onError`: `toast.error(getErrorMessage(error))`.Value -replace '\[ \]', '[X]' [US3] Add `apps/dashboard/src/modules/categories/hooks/use-update-category.ts` — `useMutation({ mutationFn: ({ id, payload }) => updateCategoryRequest(id, payload) })`; `onSuccess`: `toast.success('Category updated')`, invalidate `['categories']`; `onError`: `toast.error(getErrorMessage(error))`
+- - [x] T031 [US3] Update `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — add edit dialog (controlled with `useState` + selected category state); show Edit action in table row only when `isAdmin`; wire `use-update-category` hook; pass existing category data as `defaultValues` to `category-form`.Value -replace '\[ \]', '[X]' [US3] Update `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — add edit dialog (controlled with `useState` + selected category state); show Edit action in table row only when `isAdmin`; wire `use-update-category` hook; pass existing category data as `defaultValues` to `category-form`
 
 **Checkpoint**: Admin can edit categories end-to-end; self-name update succeeds; cross-restaurant edit rejected.
 
@@ -124,15 +124,15 @@ Frontend must cover list rendering, pagination, admin action visibility, form va
 
 ### Tests for User Story 4
 
-- [ ] T032 [P] [US4] Backend integration test — `DELETE /categories/:id` removes the category and returns 200 success envelope
-- [ ] T033 [P] [US4] Backend integration test — `DELETE /categories/:id` for non-existent or cross-restaurant ID returns 404
-- [ ] T034 [P] [US4] Backend integration test — `DELETE /categories/:id` as non-admin returns 403
+- - [x] T032 [P] [US4] Backend integration test — `DELETE /categories/:id` removes the category and returns 200 success envelope.Value -replace '\[ \]', '[X]' [P] [US4] Backend integration test — `DELETE /categories/:id` removes the category and returns 200 success envelope
+- - [x] T033 [P] [US4] Backend integration test — `DELETE /categories/:id` for non-existent or cross-restaurant ID returns 404.Value -replace '\[ \]', '[X]' [P] [US4] Backend integration test — `DELETE /categories/:id` for non-existent or cross-restaurant ID returns 404
+- - [x] T034 [P] [US4] Backend integration test — `DELETE /categories/:id` as non-admin returns 403.Value -replace '\[ \]', '[X]' [P] [US4] Backend integration test — `DELETE /categories/:id` as non-admin returns 403
 
 ### Implementation for User Story 4
 
-- [ ] T035 [P] [US4] Add `apps/dashboard/src/modules/categories/components/delete-category-dialog.tsx` — shadcn `AlertDialog`; shows category name in confirmation text; Delete button disabled + shows "Deleting…" while mutation is pending; Cancel closes dialog without action
-- [ ] T036 [US4] Add `apps/dashboard/src/modules/categories/hooks/use-delete-category.ts` — `useMutation({ mutationFn: deleteCategoryRequest })`; `onSuccess`: `toast.success('Category deleted')`, invalidate `['categories']`; `onError`: `toast.error(getErrorMessage(error))`
-- [ ] T037 [US4] Update `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — add delete dialog (controlled with `useState` + selected category state); show Delete action in table row only when `isAdmin`; wire `use-delete-category` hook to `delete-category-dialog`
+- - [x] T035 [P] [US4] Add `apps/dashboard/src/modules/categories/components/delete-category-dialog.tsx` — shadcn `AlertDialog`; shows category name in confirmation text; Delete button disabled + shows "Deleting…" while mutation is pending; Cancel closes dialog without action.Value -replace '\[ \]', '[X]' [P] [US4] Add `apps/dashboard/src/modules/categories/components/delete-category-dialog.tsx` — shadcn `AlertDialog`; shows category name in confirmation text; Delete button disabled + shows "Deleting…" while mutation is pending; Cancel closes dialog without action
+- - [x] T036 [US4] Add `apps/dashboard/src/modules/categories/hooks/use-delete-category.ts` — `useMutation({ mutationFn: deleteCategoryRequest })`; `onSuccess`: `toast.success('Category deleted')`, invalidate `['categories']`; `onError`: `toast.error(getErrorMessage(error))`.Value -replace '\[ \]', '[X]' [US4] Add `apps/dashboard/src/modules/categories/hooks/use-delete-category.ts` — `useMutation({ mutationFn: deleteCategoryRequest })`; `onSuccess`: `toast.success('Category deleted')`, invalidate `['categories']`; `onError`: `toast.error(getErrorMessage(error))`
+- - [x] T037 [US4] Update `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — add delete dialog (controlled with `useState` + selected category state); show Delete action in table row only when `isAdmin`; wire `use-delete-category` hook to `delete-category-dialog`.Value -replace '\[ \]', '[X]' [US4] Update `apps/dashboard/src/modules/categories/pages/categories-page.tsx` — add delete dialog (controlled with `useState` + selected category state); show Delete action in table row only when `isAdmin`; wire `use-delete-category` hook to `delete-category-dialog`
 
 **Checkpoint**: All four user stories are independently functional and demo-ready end-to-end.
 
@@ -142,16 +142,16 @@ Frontend must cover list rendering, pagination, admin action visibility, form va
 
 **Purpose**: Typecheck validation, frontend component test coverage, and acceptance scenario verification.
 
-- [ ] T038 [P] Run and confirm `pnpm --filter @srms/api-contracts typecheck` passes
-- [ ] T039 [P] Run and confirm `pnpm --filter @srms/api-client typecheck` passes
-- [ ] T040 [P] Run and confirm `pnpm --filter api typecheck` passes
-- [ ] T041 [P] Run and confirm `pnpm --filter dashboard typecheck` passes
-- [ ] T042 [P] Frontend component test — `categories-page.tsx`: renders skeleton during loading, empty state for admin vs non-admin, table rows when data present
-- [ ] T043 [P] Frontend component test — pagination: clicking next/previous page updates query key and renders correct subset
-- [ ] T044 [P] Frontend component test — admin action visibility: Edit/Delete visible for ADMIN role, hidden for CASHIER
-- [ ] T045 [P] Frontend component test — `category-form.tsx`: shows inline field error for empty name; disables submit while pending
-- [ ] T046 [P] Frontend component test — `delete-category-dialog.tsx`: Cancel closes dialog without calling mutation; Confirm calls mutation
-- [ ] T047 Run all quickstart.md acceptance scenarios A–K and confirm each passes
+- - [x] T038 [P] Run and confirm `pnpm --filter @srms/api-contracts typecheck` passes.Value -replace '\[ \]', '[X]' [P] Run and confirm `pnpm --filter @srms/api-contracts typecheck` passes
+- - [x] T039 [P] Run and confirm `pnpm --filter @srms/api-client typecheck` passes.Value -replace '\[ \]', '[X]' [P] Run and confirm `pnpm --filter @srms/api-client typecheck` passes
+- - [x] T040 [P] Run and confirm `pnpm --filter api typecheck` passes.Value -replace '\[ \]', '[X]' [P] Run and confirm `pnpm --filter api typecheck` passes
+- - [x] T041 [P] Run and confirm `pnpm --filter dashboard typecheck` passes.Value -replace '\[ \]', '[X]' [P] Run and confirm `pnpm --filter dashboard typecheck` passes
+- - [x] T042 [P] Frontend component test — `categories-page.tsx`: renders skeleton during loading, empty state for admin vs non-admin, table rows when data present.Value -replace '\[ \]', '[X]' [P] Frontend component test — `categories-page.tsx`: renders skeleton during loading, empty state for admin vs non-admin, table rows when data present
+- - [x] T043 [P] Frontend component test — pagination: clicking next/previous page updates query key and renders correct subset.Value -replace '\[ \]', '[X]' [P] Frontend component test — pagination: clicking next/previous page updates query key and renders correct subset
+- - [x] T044 [P] Frontend component test — admin action visibility: Edit/Delete visible for ADMIN role, hidden for CASHIER.Value -replace '\[ \]', '[X]' [P] Frontend component test — admin action visibility: Edit/Delete visible for ADMIN role, hidden for CASHIER
+- - [x] T045 [P] Frontend component test — `category-form.tsx`: shows inline field error for empty name; disables submit while pending.Value -replace '\[ \]', '[X]' [P] Frontend component test — `category-form.tsx`: shows inline field error for empty name; disables submit while pending
+- - [x] T046 [P] Frontend component test — `delete-category-dialog.tsx`: Cancel closes dialog without calling mutation; Confirm calls mutation.Value -replace '\[ \]', '[X]' [P] Frontend component test — `delete-category-dialog.tsx`: Cancel closes dialog without calling mutation; Confirm calls mutation
+- - [x] T047 Run all quickstart.md acceptance scenarios A–K and confirm each passes.Value -replace '\[ \]', '[X]' Run all quickstart.md acceptance scenarios A–K and confirm each passes
 
 ---
 
