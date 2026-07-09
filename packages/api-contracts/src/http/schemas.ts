@@ -15,5 +15,5 @@ export const HealthCheckResponseSchema = z.object({
   timestamp: z.string(),
 });
 
-export type PaginationQuery = z.infer<typeof PaginationQuerySchema>;
+export type PaginationMeta = z.infer<typeof PaginationQuerySchema>;
 export type HealthCheckResponse = z.infer<typeof HealthCheckResponseSchema>;
