@@ -12,6 +12,8 @@ import { USER_ROLE } from '@srms/api-contracts';
 import CategoriesPage from '@/modules/categories/pages/categories-page';
 import AuthLayout from '@/layout/AuthLayout';
 
+console.log('ahmad');
+
 export default function AppRoutes() {
   return (
     <Routes>
