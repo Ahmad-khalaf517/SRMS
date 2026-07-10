@@ -12,20 +12,21 @@ import {
   CreateKitchenSectionSchema,
   UpdateKitchenSectionSchema,
   KitchenSectionQuerySchema,
+  KITCHEN_SECTION_ENDPOINTS,
 } from '@srms/api-contracts/kitchen-section';
 import { USER_ROLE } from '@srms/api-contracts/user';
 
 const kitchenSectionRoutes = Router();
 
 kitchenSectionRoutes.get(
-  '/kitchen-section',
+  KITCHEN_SECTION_ENDPOINTS.BASE,
   authenticate,
   validate({ query: KitchenSectionQuerySchema }),
   listKitchenSectionsController,
 );
 
 kitchenSectionRoutes.post(
-  '/kitchen-section',
+  KITCHEN_SECTION_ENDPOINTS.BASE,
   authenticate,
   authorize([USER_ROLE.ADMIN]),
   validate({ body: CreateKitchenSectionSchema }),
@@ -33,7 +34,7 @@ kitchenSectionRoutes.post(
 );
 
 kitchenSectionRoutes.patch(
-  '/kitchen-section/:id',
+  KITCHEN_SECTION_ENDPOINTS.BY_ID(':id'),
   authenticate,
   authorize([USER_ROLE.ADMIN]),
   validate({ body: UpdateKitchenSectionSchema }),
@@ -41,7 +42,7 @@ kitchenSectionRoutes.patch(
 );
 
 kitchenSectionRoutes.delete(
-  '/kitchen-section/:id',
+  KITCHEN_SECTION_ENDPOINTS.BY_ID(':id'),
   authenticate,
   authorize([USER_ROLE.ADMIN]),
   deleteKitchenSectionController,

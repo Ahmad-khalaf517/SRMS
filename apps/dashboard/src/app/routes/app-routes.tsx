@@ -11,6 +11,7 @@ import { RoleGuard } from '@/modules/auth/components/role-guard';
 import { USER_ROLE } from '@srms/api-contracts';
 import CategoriesPage from '@/modules/categories/pages/categories-page';
 import AuthLayout from '@/layout/AuthLayout';
+import KitchenSectionsPage from '@/modules/kitchen-section/pages/kitchen-section-page';
 
 export default function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ export default function AppRoutes() {
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/kitchen-section" element={<KitchenSectionsPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
