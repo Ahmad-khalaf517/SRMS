@@ -6,6 +6,7 @@ import authRoutes from '@/modules/auth/routes/auth.routes';
 import categoryRoutes from '@/modules/categories/routes/category.routes';
 import { errorHandler, requestLogger, notFoundHandler } from '@/shared/http/middleware/index';
 import { env } from '@/config/env';
+import kitchenSectionRoutes from '@/modules/kitchen-section/routes/kitchen-section.routes';
 
 const API_VERSION = env.API_VERSION ?? '1';
 const BASE_URL = `/api/v${API_VERSION}`;
@@ -33,6 +34,7 @@ app.use(requestLogger);
 app.use(BASE_URL, healthRoutes);
 app.use(BASE_URL, authRoutes);
 app.use(BASE_URL, categoryRoutes);
+app.use(BASE_URL, kitchenSectionRoutes);
 
 // 404 handler
 app.use(notFoundHandler);

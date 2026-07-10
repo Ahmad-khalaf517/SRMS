@@ -47,6 +47,10 @@
     "./categories": {
       "types": "./src/categories/index.ts",
       "import": "./src/categories/index.ts"
+    },
+    "./kitchen-section": {
+      "types": "./src/kitchen-section/index.ts",
+      "import": "./src/kitchen-section/index.ts"
     }
   },
   "devDependencies": {

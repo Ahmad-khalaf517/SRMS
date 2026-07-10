@@ -12,6 +12,7 @@ import { USER_ROLE } from '@srms/api-contracts';
 import CategoriesPage from '@/modules/categories/pages/categories-page';
 import AuthLayout from '@/layouts/AuthLayout';
 import NAV_LINKS from '@/app/constants/nav-links';
+import KitchenSectionsPage from '@/modules/kitchen-section/pages/kitchen-section-page';
 
 export default function AppRoutes() {
   return (
@@ -22,6 +23,7 @@ export default function AppRoutes() {
             <Route path="/" element={<Navigate to={NAV_LINKS.ADMIN.DASHBOARD.to} replace />} />
             <Route path={NAV_LINKS.ADMIN.DASHBOARD.to} element={<DashboardPage />} />
             <Route path={NAV_LINKS.ADMIN.CATEGORIES.to} element={<CategoriesPage />} />
+            <Route path={NAV_LINKS.ADMIN.KITCHEN.to}  element={<KitchenSectionsPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
