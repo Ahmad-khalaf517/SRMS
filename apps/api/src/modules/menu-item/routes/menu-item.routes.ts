@@ -25,7 +25,7 @@ const menuItemRoutes = Router();
 menuItemRoutes.get(
   MENU_ITEM_ENDPOINTS.BASE,
   authenticate,
-  authorize([USER_ROLE.ADMIN]),
+  authorize([USER_ROLE.ADMIN, USER_ROLE.CASHIER]),
   validate({ query: MenuItemFiltersSchema }),
   listMenuItemsController,
 );

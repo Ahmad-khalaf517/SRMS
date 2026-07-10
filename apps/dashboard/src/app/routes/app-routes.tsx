@@ -18,14 +18,17 @@ import PosPage from '@/modules/orders/pages/pos-page';
 import MyOrdersPage from '@/modules/orders/pages/my-orders-page';
 import KitchenOrdersPage from '@/modules/orders/pages/kitchen-orders-page';
 import AdminOrdersPage from '@/modules/orders/pages/admin-orders-page';
+import { RedirectUserRole } from '@/modules/auth/components/redirect-user-role';
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<ProtectedRoute />}>
+        <Route path="/" element={<RedirectUserRole />} />
+
         <Route element={<RoleGuard allowedRoles={[USER_ROLE.ADMIN]} />}>
           <Route element={<AuthLayout />}>
-            <Route path="/" element={<Navigate to={NAV_LINKS.ADMIN.DASHBOARD.to} replace />} />
+            <Route path="admin/" element={<Navigate to={NAV_LINKS.ADMIN.DASHBOARD.to} replace />} />
             <Route path={NAV_LINKS.ADMIN.DASHBOARD.to} element={<DashboardPage />} />
             <Route path={NAV_LINKS.ADMIN.CATEGORIES.to} element={<CategoriesPage />} />
             <Route path={NAV_LINKS.ADMIN.KITCHEN.to} element={<KitchenSectionsPage />} />
@@ -37,6 +40,7 @@ export default function AppRoutes() {
 
         <Route element={<RoleGuard allowedRoles={[USER_ROLE.CASHIER]} />}>
           <Route element={<AuthLayout />}>
+            <Route path="cashier/" element={<Navigate to={NAV_LINKS.CASHIER.POS.to} replace />} />
             <Route path={NAV_LINKS.CASHIER.POS.to} element={<PosPage />} />
             <Route path={NAV_LINKS.CASHIER.MY_ORDERS.to} element={<MyOrdersPage />} />
           </Route>
@@ -44,6 +48,10 @@ export default function AppRoutes() {
 
         <Route element={<RoleGuard allowedRoles={[USER_ROLE.KITCHEN_STAFF]} />}>
           <Route element={<AuthLayout />}>
+            <Route
+              path="kitchen/"
+              element={<Navigate to={NAV_LINKS.KITCHEN.ORDERS.to} replace />}
+            />
             <Route path={NAV_LINKS.KITCHEN.ORDERS.to} element={<KitchenOrdersPage />} />
           </Route>
         </Route>

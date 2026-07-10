@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 
 import { useMenuItems } from '@/modules/menu-item/hooks/use-menu-items';
@@ -44,8 +44,25 @@ export default function PosPage() {
     });
   };
 
+  const incrementItem = useCallback(
+    (menuItemId: string) => {
+      const item = items.find((entry) => entry.menuItemId === menuItemId);
+      if (!item) {
+        return;
+      }
+
+      addItem({
+        menuItemId: item.menuItemId,
+        name: item.name,
+        price: item.price,
+        quantity: 1,
+      });
+    },
+    [addItem, items],
+  );
+
   return (
-    <div className="flex flex-col gap-6 p-4 lg:p-6">
+    <div className="grow flex flex-col gap-6 p-4 lg:p-6 overflow-hidden">
       <div>
         <h1 className="text-xl font-semibold">Point of Sale</h1>
         <p className="text-sm text-muted-foreground">
@@ -53,7 +70,7 @@ export default function PosPage() {
         </p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.3fr_1fr]">
+      <div className="grow grid gap-6 xl:grid-cols-[1.3fr_1fr] overflow-hidden p-1">
         <PosMenuBrowser
           menuItems={menuItems}
           isLoading={menuItemsQuery.isLoading}
@@ -74,19 +91,7 @@ export default function PosPage() {
           canSubmit={items.length > 0}
           isSubmitting={createOrderMutation.isPending}
           onDecrement={decrementItem}
-          onIncrement={(menuItemId) => {
-            const item = items.find((entry) => entry.menuItemId === menuItemId);
-            if (!item) {
-              return;
-            }
-
-            addItem({
-              menuItemId: item.menuItemId,
-              name: item.name,
-              price: item.price,
-              quantity: 1,
-            });
-          }}
+          onIncrement={incrementItem}
           onRemove={removeItem}
           onUpdateNotes={updateNotes}
           onClear={clearCart}

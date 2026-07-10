@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@srms/ui/components/card';
-import { Badge } from '@srms/ui/components/badge';
 import type { MenuItemListItem } from '@srms/api-contracts';
 
 type PosMenuBrowserProps = {
@@ -64,15 +63,12 @@ export function PosMenuBrowser({
         ) : filteredItems.length === 0 ? (
           <p className="text-sm text-muted-foreground">No menu items found.</p>
         ) : (
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 ">
             {filteredItems.map((item) => (
               <Card key={item.id} size="sm" className="border border-border/60">
                 <CardHeader className="space-y-2">
                   <div className="flex items-start justify-between gap-2">
                     <CardTitle className="text-sm">{item.name}</CardTitle>
-                    <Badge variant={item.isAvailable ? 'default' : 'secondary'}>
-                      {item.isAvailable ? 'Available' : 'Unavailable'}
-                    </Badge>
                   </div>
                   <CardDescription>
                     {item.categoryName} - {item.kitchenSectionName}

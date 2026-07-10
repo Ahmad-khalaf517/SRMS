@@ -52,29 +52,31 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8" onSubmit={onSubmit}>
-            <FieldGroup>
+            <FieldGroup className="">
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Create your account</h1>
                 <p className="text-sm text-balance text-muted-foreground">
                   Enter your email below to create your account
                 </p>
               </div>
-              <Field>
-                <FieldLabel htmlFor="restaurant-name">Restaurant Name</FieldLabel>
-                <Input
-                  id="restaurant-name"
-                  disabled={registerMutation.isPending}
-                  {...form.register('restaurant.name')}
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="restaurant-address">Restaurant Address</FieldLabel>
-                <Input
-                  id="restaurant-address"
-                  disabled={registerMutation.isPending}
-                  {...form.register('restaurant.address')}
-                />
-              </Field>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <Field>
+                  <FieldLabel htmlFor="restaurant-name">Restaurant Name</FieldLabel>
+                  <Input
+                    id="restaurant-name"
+                    disabled={registerMutation.isPending}
+                    {...form.register('restaurant.name')}
+                  />
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="restaurant-address">Restaurant Address</FieldLabel>
+                  <Input
+                    id="restaurant-address"
+                    disabled={registerMutation.isPending}
+                    {...form.register('restaurant.address')}
+                  />
+                </Field>
+              </div>
               <Field>
                 <FieldLabel htmlFor="restaurant-phone">Restaurant Phone</FieldLabel>
                 <Input

@@ -30,7 +30,7 @@ export function PosCartPanel({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 overflow-hidden">
       {items.map((item) => (
         <PosCartItemRow
           key={item.menuItemId}

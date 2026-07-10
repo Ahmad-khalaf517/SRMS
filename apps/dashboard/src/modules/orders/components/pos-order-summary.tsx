@@ -53,7 +53,7 @@ export function PosOrderSummary({
         <CardDescription>Review, adjust quantities, and place the order.</CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="grow flex flex-col gap-4 overflow-hidden">
         <PosCartPanel
           items={items}
           onDecrement={onDecrement}
@@ -63,7 +63,7 @@ export function PosOrderSummary({
         />
       </CardContent>
 
-      <CardFooter className="flex flex-col items-stretch gap-3">
+      <CardFooter className="flex flex-col items-stretch gap-3 mt-auto">
         <div className="space-y-1 text-sm">
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground">Subtotal</span>

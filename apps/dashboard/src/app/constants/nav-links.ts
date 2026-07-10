@@ -3,32 +3,32 @@ import { ChefHat, LayoutDashboard, LayoutList, Shapes, Users } from 'lucide-reac
 const ADMIN_NAV_LINKS = {
   DASHBOARD: {
     title: 'Dashboard',
-    to: '/dashboard',
+    to: 'admin/dashboard',
     icon: LayoutDashboard,
   },
   CATEGORIES: {
     title: 'Categories',
-    to: '/categories',
+    to: 'admin/categories',
     icon: Shapes,
   },
   USERS: {
     title: 'Users',
-    to: '/users',
+    to: 'admin/users',
     icon: Users,
   },
   KITCHEN: {
     title: 'Kitchen',
-    to: '/kitchen',
+    to: 'admin/kitchen',
     icon: ChefHat,
   },
   MENU_ITEMS: {
     title: 'Menu items',
-    to: '/menu-items',
+    to: 'admin/menu-items',
     icon: LayoutList,
   },
   ORDERS: {
     title: 'Orders',
-    to: '/orders',
+    to: 'admin/orders',
     icon: LayoutList,
   },
 };
@@ -36,12 +36,12 @@ const ADMIN_NAV_LINKS = {
 const CASHIER_NAV_LINKS = {
   POS: {
     title: 'POS',
-    to: '/pos',
+    to: 'cashier/pos',
     icon: LayoutList,
   },
   MY_ORDERS: {
     title: 'My Orders',
-    to: '/my-orders',
+    to: 'cashier/my-orders',
     icon: LayoutDashboard,
   },
 };
@@ -49,7 +49,7 @@ const CASHIER_NAV_LINKS = {
 const KITCHEN_NAV_LINKS = {
   ORDERS: {
     title: 'Kitchen Orders',
-    to: '/kitchen/orders',
+    to: 'kitchen/orders',
     icon: ChefHat,
   },
 };

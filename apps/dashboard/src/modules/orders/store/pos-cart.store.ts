@@ -82,9 +82,7 @@ export const usePosCartStore = create<PosCartState>()(
         set(
           (state) => ({
             items: state.items.map((item) =>
-              item.menuItemId === menuItemId
-                ? { ...item, notes: notes?.trim() || undefined }
-                : item,
+              item.menuItemId === menuItemId ? { ...item, notes: notes || undefined } : item,
             ),
           }),
           false,

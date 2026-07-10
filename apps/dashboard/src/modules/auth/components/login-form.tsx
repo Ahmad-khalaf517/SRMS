@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useLogin } from '@/modules/auth/hooks/use-login';
+import { Link } from 'react-router';
 
 type LoginFormValues = z.infer<typeof LoginSchema>;
 
@@ -73,6 +74,12 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
           <Button type="submit" disabled={loginMutation.isPending}>
             {loginMutation.isPending ? 'Logging in...' : 'Login'}
           </Button>
+          <FieldDescription className="text-center">
+            Don&apos;t have an account?{' '}
+            <Link to="/signup" className="underline underline-offset-4">
+              Sign up
+            </Link>
+          </FieldDescription>
         </Field>
       </FieldGroup>
     </form>

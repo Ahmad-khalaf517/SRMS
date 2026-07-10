@@ -7,8 +7,11 @@ import { Toaster } from 'sonner';
 import '@srms/ui/globals.css';
 import ThemeProvider from '@/app/providers/theme-provider.tsx';
 import AppRoutes from '@/app/routes/app-routes.tsx';
+import { setupAuthInterceptors } from '@/modules/auth/api/client';
 
 const queryClient = new QueryClient();
+
+setupAuthInterceptors(queryClient);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
