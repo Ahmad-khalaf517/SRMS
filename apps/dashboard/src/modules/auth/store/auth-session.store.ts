@@ -6,7 +6,6 @@ type AuthSessionState = {
   user: User | null;
   accessToken: string | null;
   isAuthenticated: boolean;
-  // eslint-disable-next-line no-unused-vars
   setSession: (payload: { user: User; accessToken: string }) => void;
   clearSession: () => void;
 };

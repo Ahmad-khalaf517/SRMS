@@ -26,10 +26,38 @@ const ADMIN_NAV_LINKS = {
     to: '/menu-items',
     icon: LayoutList,
   },
+  ORDERS: {
+    title: 'Orders',
+    to: '/orders',
+    icon: LayoutList,
+  },
+};
+
+const CASHIER_NAV_LINKS = {
+  POS: {
+    title: 'POS',
+    to: '/pos',
+    icon: LayoutList,
+  },
+  MY_ORDERS: {
+    title: 'My Orders',
+    to: '/my-orders',
+    icon: LayoutDashboard,
+  },
+};
+
+const KITCHEN_NAV_LINKS = {
+  ORDERS: {
+    title: 'Kitchen Orders',
+    to: '/kitchen/orders',
+    icon: ChefHat,
+  },
 };
 
 const NAV_LINKS = {
   ADMIN: ADMIN_NAV_LINKS,
+  CASHIER: CASHIER_NAV_LINKS,
+  KITCHEN: KITCHEN_NAV_LINKS,
 };
 
 export default NAV_LINKS;

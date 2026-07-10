@@ -7,7 +7,6 @@ import { CreateCategorySchema, type CreateCategoryDTO } from '@srms/api-contract
 
 type CategoryFormProps = {
   defaultValues?: Partial<CreateCategoryDTO>;
-  // eslint-disable-next-line no-unused-vars
   onSubmit: (values: CreateCategoryDTO) => void;
   isPending: boolean;
   submitLabel?: string;

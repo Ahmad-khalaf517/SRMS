@@ -25,7 +25,7 @@ export default defineConfig([
           varsIgnorePattern: '^_',
         },
       ],
-      'no-unused-vars': 'error',
+      'no-unused-vars': 'off',
 
       'no-console': [
         'warn',

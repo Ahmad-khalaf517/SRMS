@@ -10,7 +10,6 @@ import {
 
 type KitchenSectionFormProps = {
   defaultValues?: Partial<CreateKitchenSectionDTO>;
-  // eslint-disable-next-line no-unused-vars
   onSubmit: (values: CreateKitchenSectionDTO) => void;
   isPending: boolean;
   submitLabel?: string;

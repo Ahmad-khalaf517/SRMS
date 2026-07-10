@@ -19,7 +19,6 @@ type MenuItemFormProps = {
   defaultValues?: Partial<CreateMenuItemDTO>;
   categories: Category[];
   kitchenSections: KitchenSection[];
-  // eslint-disable-next-line no-unused-vars
   onSubmit: (values: CreateMenuItemDTO) => void;
   isPending: boolean;
   submitLabel?: string;

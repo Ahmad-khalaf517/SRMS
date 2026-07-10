@@ -14,6 +14,10 @@ import AuthLayout from '@/layouts/AuthLayout';
 import NAV_LINKS from '@/app/constants/nav-links';
 import KitchenSectionsPage from '@/modules/kitchen-section/pages/kitchen-section-page';
 import MenuItemsPage from '@/modules/menu-item/pages/menu-items-page';
+import PosPage from '@/modules/orders/pages/pos-page';
+import MyOrdersPage from '@/modules/orders/pages/my-orders-page';
+import KitchenOrdersPage from '@/modules/orders/pages/kitchen-orders-page';
+import AdminOrdersPage from '@/modules/orders/pages/admin-orders-page';
 
 export default function AppRoutes() {
   return (
@@ -26,9 +30,24 @@ export default function AppRoutes() {
             <Route path={NAV_LINKS.ADMIN.CATEGORIES.to} element={<CategoriesPage />} />
             <Route path={NAV_LINKS.ADMIN.KITCHEN.to} element={<KitchenSectionsPage />} />
             <Route path={NAV_LINKS.ADMIN.MENU_ITEMS.to} element={<MenuItemsPage />} />
+            <Route path={NAV_LINKS.ADMIN.ORDERS.to} element={<AdminOrdersPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
+
+        <Route element={<RoleGuard allowedRoles={[USER_ROLE.CASHIER]} />}>
+          <Route element={<AuthLayout />}>
+            <Route path={NAV_LINKS.CASHIER.POS.to} element={<PosPage />} />
+            <Route path={NAV_LINKS.CASHIER.MY_ORDERS.to} element={<MyOrdersPage />} />
+          </Route>
+        </Route>
+
+        <Route element={<RoleGuard allowedRoles={[USER_ROLE.KITCHEN_STAFF]} />}>
+          <Route element={<AuthLayout />}>
+            <Route path={NAV_LINKS.KITCHEN.ORDERS.to} element={<KitchenOrdersPage />} />
+          </Route>
+        </Route>
+
         <Route path="/403" element={<ForbiddenPage />} />
       </Route>
       <Route element={<GuestRoute />}>

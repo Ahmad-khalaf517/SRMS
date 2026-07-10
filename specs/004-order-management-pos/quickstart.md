@@ -93,3 +93,17 @@ Use contract reference in `contracts/orders-api.yaml` to validate:
 - Categories, kitchen sections, and menu item pages still function.
 - Auth refresh/logout behavior remains unchanged.
 - Unauthorized users cannot access protected order routes.
+
+## Validation Outcomes (2026-07-10)
+
+- Automated validation completed:
+  - `pnpm --filter @srms/api-contracts typecheck` PASS
+  - `pnpm --filter @srms/api-client typecheck` PASS
+  - `pnpm --filter api typecheck` PASS
+  - `pnpm --filter dashboard typecheck` PASS
+  - `pnpm -r --if-present typecheck` PASS
+- Static implementation review completed:
+  - Scenario flows A-E have matching route/controller/service/page implementations.
+  - Role-route wiring for ADMIN, CASHIER, and KITCHEN_STAFF is in place.
+- Manual UI/API execution status:
+  - Full interactive scenario execution is pending live environment prerequisites (seeded users/restaurant data and running Mongo-backed app session).

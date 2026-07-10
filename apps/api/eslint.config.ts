@@ -10,7 +10,16 @@ const tsconfigRootDir = decodeURIComponent(new URL('.', import.meta.url).pathnam
 
 export default defineConfig([
   {
-    ignores: ['eslint.config.ts'],
+    ignores: [
+      'eslint.config.ts',
+      'node_modules/**',
+      'dist/**',
+      'build/**',
+      'coverage/**',
+      '.vscode/**',
+      '.idea/**',
+      '.git/**',
+    ],
   },
   ...config,
   {

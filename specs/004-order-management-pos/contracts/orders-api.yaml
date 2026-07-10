@@ -3,6 +3,11 @@ info:
   title: SRMS Orders API
   version: 1.0.0
   description: Contract draft for ORDER-001 order management, POS, and analytics endpoints.
+  x-order-001-notes:
+    - Order numbers are generated server-side during order creation.
+    - Totals (subtotal, tax, total) are authoritative from backend computation.
+    - Valid status transitions: PENDING -> PREPARING -> READY -> COMPLETED.
+    - /orders/my must only return orders created by the authenticated cashier.
 paths:
   /orders:
     post:

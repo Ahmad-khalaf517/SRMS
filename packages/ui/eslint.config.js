@@ -11,7 +11,7 @@ const tsconfigRootDir = decodeURIComponent(new URL('.', import.meta.url).pathnam
 );
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'build', 'coverage', 'node_modules', '.vscode', '.idea', '.git']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
