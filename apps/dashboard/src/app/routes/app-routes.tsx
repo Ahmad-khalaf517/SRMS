@@ -10,7 +10,8 @@ import ForbiddenPage from '@/pages/forbidden';
 import { RoleGuard } from '@/modules/auth/components/role-guard';
 import { USER_ROLE } from '@srms/api-contracts';
 import CategoriesPage from '@/modules/categories/pages/categories-page';
-import AuthLayout from '@/layout/AuthLayout';
+import AuthLayout from '@/layouts/AuthLayout';
+import NAV_LINKS from '@/app/constants/nav-links';
 import KitchenSectionsPage from '@/modules/kitchen-section/pages/kitchen-section-page';
 
 export default function AppRoutes() {
@@ -19,10 +20,10 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route element={<RoleGuard allowedRoles={[USER_ROLE.ADMIN]} />}>
           <Route element={<AuthLayout />}>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/categories" element={<CategoriesPage />} />
-            <Route path="/kitchen-section" element={<KitchenSectionsPage />} />
+            <Route path="/" element={<Navigate to={NAV_LINKS.ADMIN.DASHBOARD.to} replace />} />
+            <Route path={NAV_LINKS.ADMIN.DASHBOARD.to} element={<DashboardPage />} />
+            <Route path={NAV_LINKS.ADMIN.CATEGORIES.to} element={<CategoriesPage />} />
+            <Route path={NAV_LINKS.ADMIN.KITCHEN.to}  element={<KitchenSectionsPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

@@ -7,38 +7,16 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@srms/ui/components/sidebar';
-import { ChefHat, LayoutDashboard, LayoutList, Shapes, Users } from 'lucide-react';
+import NAV_LINKS from '@/app/constants/nav-links';
+import { useMemo } from 'react';
 
-const navItems = [
-  {
-    title: 'Dashboard',
-    to: '/dashboard',
-    icon: LayoutDashboard,
-  },
-  {
-    title: 'Categories',
-    to: '/categories',
-    icon: Shapes,
-  },
-  {
-    title: 'Users',
-    to: '/users',
-    icon: Users,
-  },
-  {
-    title: 'Kitchen',
-    to: '/kitchen',
-    icon: ChefHat,
-  },
-  {
-    title: 'Menu items',
-    to: '/menu-items',
-    icon: LayoutList,
-  },
-];
+const activeItemClassName = 'bg-primary text-primary-foreground';
 
 export function NavMain() {
   const navigate = useNavigate();
+  const activePath = window.location.pathname;
+
+  const navItems = useMemo(() => Object.values(NAV_LINKS.ADMIN), []);
 
   return (
     <SidebarGroup>
@@ -46,7 +24,11 @@ export function NavMain() {
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton onClick={() => navigate(item.to)} tooltip={item.title}>
+              <SidebarMenuButton
+                onClick={() => navigate(item.to)}
+                tooltip={item.title}
+                className={activePath === item.to ? activeItemClassName : ''}
+              >
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
               </SidebarMenuButton>

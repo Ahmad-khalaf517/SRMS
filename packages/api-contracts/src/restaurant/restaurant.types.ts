@@ -4,6 +4,7 @@ export type Restaurant = {
   address: string;
   phone: string;
   email: string;
+  logo?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

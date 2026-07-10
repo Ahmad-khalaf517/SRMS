@@ -5,7 +5,10 @@ import {
   findActiveRoleForUser,
   findActiveRoleForUserInRestaurant,
 } from '@/modules/auth/repository/user-role.repository';
-import { createRestaurant } from '@/modules/auth/repository/restaurant.repository';
+import {
+  createRestaurantService,
+  findRestaurantByIdService,
+} from '@/modules/restaurants/service/restaurant.service';
 import {
   createUser,
   findUserByEmail,
@@ -36,7 +39,7 @@ export const registerAuth = async (payload: RegisterDTO): Promise<AuthData> => {
   try {
     session.startTransaction();
 
-    const restaurant = await createRestaurant(
+    const restaurant = await createRestaurantService(
       {
         ...payload.restaurant,
         email: restaurantEmail,
@@ -58,7 +61,7 @@ export const registerAuth = async (payload: RegisterDTO): Promise<AuthData> => {
     const roleAssignment = await createUserRole(
       {
         userId: user._id.toString(),
-        restaurantId: restaurant._id.toString(),
+        restaurantId: restaurant.id,
         role: USER_ROLE.ADMIN,
       },
       session,
@@ -72,6 +75,7 @@ export const registerAuth = async (payload: RegisterDTO): Promise<AuthData> => {
       role: roleAssignment.role,
     });
     const refreshToken = generateRefreshToken({ userId: user._id.toString() });
+    const restaurantData = await findRestaurantByIdService(roleAssignment.restaurantId.toString());
 
     return {
       user: {
@@ -84,6 +88,7 @@ export const registerAuth = async (payload: RegisterDTO): Promise<AuthData> => {
       },
       accessToken,
       refreshToken,
+      restaurant: restaurantData, // Cast to any to avoid type issues, you may want to define a proper type for this
     };
   } catch (error) {
     await session.abortTransaction();
@@ -121,6 +126,7 @@ export const loginAuth = async (payload: LoginDTO): Promise<AuthData> => {
     role: activeRoleAssignment.role,
   });
   const refreshToken = generateRefreshToken({ userId: user._id.toString() });
+  const restaurant = await findRestaurantByIdService(activeRoleAssignment.restaurantId.toString());
 
   return {
     user: {
@@ -133,6 +139,7 @@ export const loginAuth = async (payload: LoginDTO): Promise<AuthData> => {
     },
     accessToken,
     refreshToken,
+    restaurant: restaurant, // Cast to any to avoid type issues, you may want to define a proper type for this
   };
 };
 
@@ -151,6 +158,8 @@ export const getCurrentAuthUser = async (
     throw new UnauthorizedError('No active role assignment found');
   }
 
+  const restaurant = await findRestaurantByIdService(activeRoleAssignment.restaurantId.toString());
+
   return {
     user: {
       id: user._id.toString(),
@@ -160,6 +169,7 @@ export const getCurrentAuthUser = async (
       role: activeRoleAssignment.role,
       isActive: user.isActive,
     },
+    restaurant,
     accessToken,
   };
 };
@@ -183,6 +193,8 @@ export const refreshAuth = async (refreshToken: string): Promise<AuthData> => {
     role: activeRoleAssignment.role,
   });
 
+  const restaurant = await findRestaurantByIdService(activeRoleAssignment.restaurantId.toString());
+
   return {
     user: {
       id: user._id.toString(),
@@ -192,6 +204,7 @@ export const refreshAuth = async (refreshToken: string): Promise<AuthData> => {
       role: activeRoleAssignment.role,
       isActive: user.isActive,
     },
+    restaurant,
     accessToken,
   };
 };
