@@ -20,6 +20,7 @@ import {
   type OrderDocument,
   type OrderItemDocument,
 } from '@/modules/orders/repository/orders.repository';
+import { findUsersByIds } from '@/modules/auth/repository/user.repository';
 import { findMenuItemById } from '@/modules/menu-item/repository/menu-item.repository';
 import { AppError, ConflictError, NotFoundError, ValidationError } from '@/shared/errors/app-error';
 
@@ -30,7 +31,11 @@ const ORDER_TRANSITIONS: Record<string, string[]> = {
   [ORDER_STATUS.COMPLETED]: [],
 };
 
-const toOrderDTO = (doc: OrderDocument, items: OrderItemDocument[] = []): Order => ({
+const toOrderDTO = (
+  doc: OrderDocument,
+  items: OrderItemDocument[] = [],
+  createdByName?: string,
+): Order => ({
   id: doc._id.toString(),
   orderNumber: doc.orderNumber as string,
   status: doc.status as (typeof ORDER_STATUS)[keyof typeof ORDER_STATUS],
@@ -39,6 +44,7 @@ const toOrderDTO = (doc: OrderDocument, items: OrderItemDocument[] = []): Order 
   total: doc.total as number,
   restaurantId: doc.restaurantId.toString(),
   createdBy: doc.createdBy.toString(),
+  createdByName,
   completedAt: doc.completedAt ? (doc.completedAt as Date).toISOString() : undefined,
   createdAt: (doc.createdAt as Date).toISOString(),
   updatedAt: (doc.updatedAt as Date).toISOString(),
@@ -157,8 +163,12 @@ export const listOrdersService = async (
   const limit = filters.limit ?? 10;
   const { docs, total } = await findOrders(restaurantId, filters);
 
+  const creatorIds = Array.from(new Set(docs.map((doc) => doc.createdBy.toString())));
+  const creators = await findUsersByIds(creatorIds);
+  const createdByNameMap = new Map(creators.map((creator) => [creator.id, creator.name]));
+
   return {
-    data: docs.map((doc) => toOrderDTO(doc)),
+    data: docs.map((doc) => toOrderDTO(doc, [], createdByNameMap.get(doc.createdBy.toString()))),
     pagination: {
       page,
       limit,

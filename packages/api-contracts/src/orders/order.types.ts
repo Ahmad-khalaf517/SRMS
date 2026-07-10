@@ -41,6 +41,7 @@ export type Order = {
   total: number;
   restaurantId: string;
   createdBy: string;
+  createdByName?: string;
   completedAt?: string;
   createdAt: string;
   updatedAt: string;

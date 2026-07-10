@@ -166,7 +166,7 @@ export default function AdminOrdersPage() {
                   <TableCell className="font-medium">{order.orderNumber}</TableCell>
                   <TableCell>{order.status}</TableCell>
                   <TableCell>${order.total.toFixed(2)}</TableCell>
-                  <TableCell className="font-mono text-xs">{order.createdBy}</TableCell>
+                  <TableCell>{order.createdByName ?? order.createdBy}</TableCell>
                   <TableCell>
                     {new Date(order.createdAt).toLocaleString(undefined, {
                       year: 'numeric',
