@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
+      <ThemeProvider storageKey="srms-ui-theme">
         <BrowserRouter>
           <AppRoutes />
           <Toaster richColors position="top-right" />

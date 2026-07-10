@@ -1,51 +1,52 @@
-"use client"
-
-import { IconCirclePlusFilled, IconMail, type Icon } from "@tabler/icons-react"
-
-import { Button } from "@srms/ui/components/button"
+'use client';
+import { useNavigate } from 'react-router';
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@srms/ui/components/sidebar"
+} from '@srms/ui/components/sidebar';
+import { ChefHat, LayoutDashboard, LayoutList, Shapes, Users } from 'lucide-react';
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string
-    url: string
-    icon?: Icon
-  }[]
-}) {
+const navItems = [
+  {
+    title: 'Dashboard',
+    to: '/dashboard',
+    icon: LayoutDashboard,
+  },
+  {
+    title: 'Categories',
+    to: '/categories',
+    icon: Shapes,
+  },
+  {
+    title: 'Users',
+    to: '/users',
+    icon: Users,
+  },
+  {
+    title: 'Kitchen',
+    to: '/kitchen',
+    icon: ChefHat,
+  },
+  {
+    title: 'Menu items',
+    to: '/menu-items',
+    icon: LayoutList,
+  },
+];
+
+export function NavMain() {
+  const navigate = useNavigate();
+
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
-          <SidebarMenuItem className="flex items-center gap-2">
-            <SidebarMenuButton
-              tooltip="Quick Create"
-              className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
-            >
-              <IconCirclePlusFilled />
-              <span>Quick Create</span>
-            </SidebarMenuButton>
-            <Button
-              size="icon"
-              className="size-8 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
-            >
-              <IconMail />
-              <span className="sr-only">Inbox</span>
-            </Button>
-          </SidebarMenuItem>
-        </SidebarMenu>
-        <SidebarMenu>
-          {items.map((item) => (
+          {navItems.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton  tooltip={item.title}>
+              <SidebarMenuButton onClick={() => navigate(item.to)} tooltip={item.title}>
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
               </SidebarMenuButton>
@@ -54,5 +55,5 @@ export function NavMain({
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
-  )
+  );
 }

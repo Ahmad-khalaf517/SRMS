@@ -6,7 +6,7 @@ const NotFoundPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="grid min-h-screen w-full xl:grid-cols-2">
+    <div className="grid w-full h-full xl:grid-cols-2">
       <div className="flex flex-col p-16">
         {/* Logo */}
         <div className="mb-8 flex items-center justify-center gap-2 xl:justify-start">
