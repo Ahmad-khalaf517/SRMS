@@ -1,0 +1,122 @@
+openapi: 3.1.0
+info:
+  title: SRMS Menu Items API
+  version: 1.0.0
+  description: CRUD, detail, search, filter, and availability endpoints for restaurant menu items.
+
+paths:
+  /api/v1/menu-items:
+    get:
+      summary: List menu items for the authenticated restaurant
+      tags: [Menu Items]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 100, default: 10 }
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: categoryId
+          schema: { type: string }
+        - in: query
+          name: kitchenSectionId
+          schema: { type: string }
+        - in: query
+          name: isAvailable
+          schema: { type: boolean }
+      responses:
+        '200':
+          description: Paginated menu item list
+    post:
+      summary: Create menu item
+      tags: [Menu Items]
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Menu item created
+        '403':
+          description: Forbidden
+
+  /api/v1/menu-items/{id}:
+    get:
+      summary: Get menu item by id
+      tags: [Menu Items]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Menu item detail
+        '404':
+          description: Not found
+    patch:
+      summary: Update menu item
+      tags: [Menu Items]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Menu item updated
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+    delete:
+      summary: Delete menu item
+      tags: [Menu Items]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Menu item deleted
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+  /api/v1/menu-items/{id}/availability:
+    patch:
+      summary: Toggle or explicitly set menu item availability
+      tags: [Menu Items]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Availability updated
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
