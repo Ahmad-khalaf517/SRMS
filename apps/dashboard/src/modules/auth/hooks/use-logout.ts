@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
@@ -10,14 +10,15 @@ import { getErrorMessage } from '@srms/utils';
 export const useLogout = () => {
   const navigate = useNavigate();
   const clearSession = useAuthSessionStore((state) => state.clearSession);
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: logoutRequest,
     onSuccess: () => {
       setAuthAccessToken(null);
       clearSession();
+      queryClient.clear();
       navigate('/login', { replace: true });
-      toast.success('Logged out successfully');
     },
     onError: (error) => {
       toast.error(getErrorMessage(error));
