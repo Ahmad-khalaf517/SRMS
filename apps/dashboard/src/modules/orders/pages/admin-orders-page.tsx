@@ -26,8 +26,8 @@ import { useOrderMetrics, useOrders, useTopSellingItems } from '@/modules/orders
 const DEFAULT_LIMIT = 10;
 
 const toDateRange = (fromDate?: string, toDate?: string) => ({
-  from: fromDate ? new Date(`${fromDate}T00:00:00.000Z`).toISOString() : undefined,
-  to: toDate ? new Date(`${toDate}T23:59:59.999Z`).toISOString() : undefined,
+  from: fromDate ? new Date(`${fromDate}T00:00:00.000`).toISOString() : undefined,
+  to: toDate ? new Date(`${toDate}T23:59:59.999`).toISOString() : undefined,
 });
 
 export default function AdminOrdersPage() {

@@ -6,7 +6,7 @@ import {
   type TopSellingItem,
   type UpdateOrderStatusDTO,
 } from '@srms/api-contracts/orders';
-import { model, Schema, type InferSchemaType, type Types } from 'mongoose';
+import { model, Schema, Types, type InferSchemaType } from 'mongoose';
 
 const orderSchema = new Schema(
   {
@@ -96,6 +96,17 @@ const buildOrderQuery = (
   }
 
   return query;
+};
+
+const buildDateMatch = (from?: string, to?: string): Record<string, unknown> | undefined => {
+  if (!from && !to) {
+    return undefined;
+  }
+
+  return {
+    ...(from ? { $gte: new Date(from) } : {}),
+    ...(to ? { $lte: new Date(to) } : {}),
+  };
 };
 
 export const createOrder = async (
@@ -206,12 +217,12 @@ export const getOrderMetrics = async (
   from?: string,
   to?: string,
 ): Promise<OrderMetrics> => {
-  const match: Record<string, unknown> = { restaurantId };
-  if (from || to) {
-    match.createdAt = {
-      ...(from ? { $gte: new Date(from) } : {}),
-      ...(to ? { $lte: new Date(to) } : {}),
-    };
+  const match: Record<string, unknown> = {
+    restaurantId: new Types.ObjectId(restaurantId),
+  };
+  const dateMatch = buildDateMatch(from, to);
+  if (dateMatch) {
+    match.createdAt = dateMatch;
   }
 
   const result = await OrderModel.aggregate([
@@ -247,12 +258,12 @@ export const getTopSellingItems = async (
   to?: string,
   limit = 10,
 ): Promise<TopSellingItem[]> => {
-  const match: Record<string, unknown> = { restaurantId };
-  if (from || to) {
-    match.createdAt = {
-      ...(from ? { $gte: new Date(from) } : {}),
-      ...(to ? { $lte: new Date(to) } : {}),
-    };
+  const match: Record<string, unknown> = {
+    restaurantId: new Types.ObjectId(restaurantId),
+  };
+  const dateMatch = buildDateMatch(from, to);
+  if (dateMatch) {
+    match.createdAt = dateMatch;
   }
 
   const result = await OrderItemModel.aggregate([
