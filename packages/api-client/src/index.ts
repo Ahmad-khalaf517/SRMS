@@ -18,3 +18,4 @@ export * from './auth.js';
 export * from './categories.js';
 export * from './kitchen-section.js';
 export * from './menu-item.js';
+export * from './user.js';
