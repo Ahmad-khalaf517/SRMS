@@ -15,11 +15,6 @@ export function InitialLoader() {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="w-full max-w-md space-y-4 px-6">
-        <div className="text-center">
-          <h1 className="font-semibold">Loading</h1>
-          <p className="text-sm text-muted-foreground">Fetching your account information</p>
-        </div>
-
         <Progress value={progress} />
       </div>
     </div>

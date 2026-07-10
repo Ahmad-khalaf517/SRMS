@@ -13,6 +13,7 @@ import CategoriesPage from '@/modules/categories/pages/categories-page';
 import AuthLayout from '@/layouts/AuthLayout';
 import NAV_LINKS from '@/app/constants/nav-links';
 import KitchenSectionsPage from '@/modules/kitchen-section/pages/kitchen-section-page';
+import MenuItemsPage from '@/modules/menu-item/pages/menu-items-page';
 
 export default function AppRoutes() {
   return (
@@ -23,7 +24,8 @@ export default function AppRoutes() {
             <Route path="/" element={<Navigate to={NAV_LINKS.ADMIN.DASHBOARD.to} replace />} />
             <Route path={NAV_LINKS.ADMIN.DASHBOARD.to} element={<DashboardPage />} />
             <Route path={NAV_LINKS.ADMIN.CATEGORIES.to} element={<CategoriesPage />} />
-            <Route path={NAV_LINKS.ADMIN.KITCHEN.to}  element={<KitchenSectionsPage />} />
+            <Route path={NAV_LINKS.ADMIN.KITCHEN.to} element={<KitchenSectionsPage />} />
+            <Route path={NAV_LINKS.ADMIN.MENU_ITEMS.to} element={<MenuItemsPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

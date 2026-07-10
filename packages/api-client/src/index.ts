@@ -16,4 +16,5 @@ export const createApiClient = (config: ApiClientConfig): AxiosInstance => {
 
 export * from './auth.js';
 export * from './categories.js';
-export * from './kitchen-section';
+export * from './kitchen-section.js';
+export * from './menu-item.js';

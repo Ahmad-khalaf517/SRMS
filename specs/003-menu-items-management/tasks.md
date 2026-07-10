@@ -20,14 +20,14 @@
 
 **Purpose**: Add shared menu-item contracts and API client support before application code starts.
 
-- [ ] T001 Add `packages/api-contracts/src/menu-item/menu-item.types.ts` with `MenuItem`, `MenuItemListItem`, `CreateMenuItemDTO`, `UpdateMenuItemDTO`, `MenuItemFiltersDTO`, and menu-item response envelope types
-- [ ] T002 [P] Add `packages/api-contracts/src/menu-item/schemas.ts` with `CreateMenuItemSchema`, `UpdateMenuItemSchema`, `MenuItemFiltersSchema`, and route-param validation schema(s)
-- [ ] T003 [P] Add `packages/api-contracts/src/menu-item/routes.ts` (or `constants.ts`) with `MENU_ITEM_ENDPOINTS` route constants following existing Categories and Kitchen Sections patterns
-- [ ] T004 Add `packages/api-contracts/src/menu-item/index.ts` barrel exporting menu-item types, schemas, and route constants
-- [ ] T005 Update `packages/api-contracts/src/index.ts` to export the new `menu-item` domain
-- [ ] T006 Update `packages/api-contracts/package.json` exports to add `./menu-item`
-- [ ] T007 Add `packages/api-client/src/menu-item.ts` with `getMenuItems`, `getMenuItemById`, `createMenuItem`, `updateMenuItem`, `toggleMenuItemAvailability`, and `deleteMenuItem`
-- [ ] T008 Update `packages/api-client/src/index.ts` to export `./menu-item.js`
+- [x] T001 Add `packages/api-contracts/src/menu-item/menu-item.types.ts` with `MenuItem`, `MenuItemListItem`, `CreateMenuItemDTO`, `UpdateMenuItemDTO`, `MenuItemFiltersDTO`, and menu-item response envelope types
+- [x] T002 [P] Add `packages/api-contracts/src/menu-item/schemas.ts` with `CreateMenuItemSchema`, `UpdateMenuItemSchema`, `MenuItemFiltersSchema`, and route-param validation schema(s)
+- [x] T003 [P] Add `packages/api-contracts/src/menu-item/routes.ts` (or `constants.ts`) with `MENU_ITEM_ENDPOINTS` route constants following existing Categories and Kitchen Sections patterns
+- [x] T004 Add `packages/api-contracts/src/menu-item/index.ts` barrel exporting menu-item types, schemas, and route constants
+- [x] T005 Update `packages/api-contracts/src/index.ts` to export the new `menu-item` domain
+- [x] T006 Update `packages/api-contracts/package.json` exports to add `./menu-item`
+- [x] T007 Add `packages/api-client/src/menu-item.ts` with `getMenuItems`, `getMenuItemById`, `createMenuItem`, `updateMenuItem`, `toggleMenuItemAvailability`, and `deleteMenuItem`
+- [x] T008 Update `packages/api-client/src/index.ts` to export `./menu-item.js`
 
 **Checkpoint**: `pnpm --filter @srms/api-contracts typecheck` and `pnpm --filter @srms/api-client typecheck` pass.
 
@@ -40,11 +40,11 @@
 **⚠️ CRITICAL**: No user story implementation should begin before this phase completes.
 
 - [ ] T009 Add automated test infrastructure configuration for the repo in `package.json`, `apps/api/package.json`, `apps/dashboard/package.json`, and any required config files so backend and frontend tests can be executed consistently
-- [ ] T010 Add `apps/api/src/modules/menu-item/repository/menu-item.repository.ts` with Mongoose schema, indexes, model, and repository functions (`findMenuItemsByRestaurant`, `findMenuItemById`, `createMenuItem`, `updateMenuItemById`, `deleteMenuItemById`, `toggleMenuItemAvailability`)
-- [ ] T011 Add `apps/api/src/modules/menu-item/service/menu-item.service.ts` with restaurant-scoped CRUD, detail, search, filter, toggle, DTO mapping, and referential validation against Categories and Kitchen Sections
-- [ ] T012 Add `apps/api/src/modules/menu-item/controller/menu-item.controller.ts` with list, detail, create, update, toggle, and delete handlers using `sendSuccess`
-- [ ] T013 Add `apps/api/src/modules/menu-item/routes/menu-item.routes.ts` wiring `authenticate`, `authorize`, and `validate` middleware to all menu-item endpoints
-- [ ] T014 Update `apps/api/src/app.ts` to register menu-item routes under the existing API base path
+- [x] T010 Add `apps/api/src/modules/menu-item/repository/menu-item.repository.ts` with Mongoose schema, indexes, model, and repository functions (`findMenuItemsByRestaurant`, `findMenuItemById`, `createMenuItem`, `updateMenuItemById`, `deleteMenuItemById`, `toggleMenuItemAvailability`)
+- [x] T011 Add `apps/api/src/modules/menu-item/service/menu-item.service.ts` with restaurant-scoped CRUD, detail, search, filter, toggle, DTO mapping, and referential validation against Categories and Kitchen Sections
+- [x] T012 Add `apps/api/src/modules/menu-item/controller/menu-item.controller.ts` with list, detail, create, update, toggle, and delete handlers using `sendSuccess`
+- [x] T013 Add `apps/api/src/modules/menu-item/routes/menu-item.routes.ts` wiring `authenticate`, `authorize`, and `validate` middleware to all menu-item endpoints
+- [x] T014 Update `apps/api/src/app.ts` to register menu-item routes under the existing API base path
 
 **Checkpoint**: Shared contracts, test infrastructure, and the API module exist. `pnpm --filter api typecheck` passes.
 
@@ -63,10 +63,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T017 [P] [US1] Add `apps/dashboard/src/modules/menu-item/api/index.ts` with thin wrappers that bind `authApiClient` to the menu-item API client functions
-- [ ] T018 [P] [US1] Add `apps/dashboard/src/modules/menu-item/hooks/use-menu-items.ts` using TanStack Query for list retrieval with pagination, search, and filter inputs
-- [ ] T019 [US1] Add `apps/dashboard/src/modules/menu-item/pages/menu-items-page.tsx` with paginated table UI, skeleton loading, empty state, error state, and visible columns: Name, Category, Kitchen Section, Price, Availability Status, Created Date, Actions
-- [ ] T020 [US1] Update `apps/dashboard/src/app/routes/app-routes.tsx` and `apps/dashboard/src/app/constants/nav-links.ts` to register the `/menu-items` route and admin navigation entry using existing ProtectedRoute/RoleGuard patterns
+- [x] T017 [P] [US1] Add `apps/dashboard/src/modules/menu-item/api/index.ts` with thin wrappers that bind `authApiClient` to the menu-item API client functions
+- [x] T018 [P] [US1] Add `apps/dashboard/src/modules/menu-item/hooks/use-menu-items.ts` using TanStack Query for list retrieval with pagination, search, and filter inputs
+- [x] T019 [US1] Add `apps/dashboard/src/modules/menu-item/pages/menu-items-page.tsx` with paginated table UI, skeleton loading, empty state, error state, and visible columns: Name, Category, Kitchen Section, Price, Availability Status, Created Date, Actions
+- [x] T020 [US1] Update `apps/dashboard/src/app/routes/app-routes.tsx` and `apps/dashboard/src/app/constants/nav-links.ts` to register the `/menu-items` route and admin navigation entry using existing ProtectedRoute/RoleGuard patterns
 
 **Checkpoint**: The menu-items list page is independently functional and demo-ready.
 
@@ -85,10 +85,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T023 [P] [US2] Add `apps/dashboard/src/modules/menu-item/schemas/menu-item-form.schema.ts` wrapping shared create/update schemas for React Hook Form usage
-- [ ] T024 [P] [US2] Add `apps/dashboard/src/modules/menu-item/hooks/use-create-menu-item.ts` using TanStack Query mutation with success/error notifications and list invalidation
-- [ ] T025 [P] [US2] Add `apps/dashboard/src/modules/menu-item/components/menu-item-form.tsx` with fields for name, description, price, category, kitchen section, and availability, including category/kitchen-section dropdown data loading
-- [ ] T026 [US2] Update `apps/dashboard/src/modules/menu-item/pages/menu-items-page.tsx` to add create-menu-item flow (Sheet/dialog), create button visibility for admins only, and post-create list refresh
+- [x] T023 [P] [US2] Add `apps/dashboard/src/modules/menu-item/schemas/menu-item-form.schema.ts` wrapping shared create/update schemas for React Hook Form usage
+- [x] T024 [P] [US2] Add `apps/dashboard/src/modules/menu-item/hooks/use-create-menu-item.ts` using TanStack Query mutation with success/error notifications and list invalidation
+- [x] T025 [P] [US2] Add `apps/dashboard/src/modules/menu-item/components/menu-item-form.tsx` with fields for name, description, price, category, kitchen section, and availability, including category/kitchen-section dropdown data loading
+- [x] T026 [US2] Update `apps/dashboard/src/modules/menu-item/pages/menu-items-page.tsx` to add create-menu-item flow (Sheet/dialog), create button visibility for admins only, and post-create list refresh
 
 **Checkpoint**: Admin can create a menu item end-to-end and non-admin attempts are rejected.
 
@@ -107,8 +107,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T029 [P] [US3] Add `apps/dashboard/src/modules/menu-item/hooks/use-update-menu-item.ts` and `apps/dashboard/src/modules/menu-item/hooks/use-toggle-menu-item-availability.ts` with mutation + invalidation behavior
-- [ ] T030 [US3] Update `apps/dashboard/src/modules/menu-item/pages/menu-items-page.tsx` to support edit flow, prefilled form state, and inline availability toggle controls for admins
+- [x] T029 [P] [US3] Add `apps/dashboard/src/modules/menu-item/hooks/use-update-menu-item.ts` and `apps/dashboard/src/modules/menu-item/hooks/use-toggle-menu-item-availability.ts` with mutation + invalidation behavior
+- [x] T030 [US3] Update `apps/dashboard/src/modules/menu-item/pages/menu-items-page.tsx` to support edit flow, prefilled form state, and inline availability toggle controls for admins
 
 **Checkpoint**: Update and toggle availability are independently functional.
 
@@ -127,8 +127,8 @@
 
 ### Implementation for User Story 4
 
-- [ ] T033 [P] [US4] Add `apps/dashboard/src/modules/menu-item/hooks/use-menu-item.ts` for single-item detail retrieval
-- [ ] T034 [US4] Update `apps/dashboard/src/modules/menu-item/pages/menu-items-page.tsx` and/or add a dedicated detail page/component to support name search, filter toolbar, and menu-item detail viewing while following Categories/Kitchen Sections UI conventions
+- [x] T033 [P] [US4] Add `apps/dashboard/src/modules/menu-item/hooks/use-menu-item.ts` for single-item detail retrieval
+- [x] T034 [US4] Update `apps/dashboard/src/modules/menu-item/pages/menu-items-page.tsx` and/or add a dedicated detail page/component to support name search, filter toolbar, and menu-item detail viewing while following Categories/Kitchen Sections UI conventions
 
 **Checkpoint**: Search, filters, and detail view all work without breaking the main list flow.
 
@@ -147,9 +147,9 @@
 
 ### Implementation for User Story 5
 
-- [ ] T037 [P] [US5] Add `apps/dashboard/src/modules/menu-item/hooks/use-delete-menu-item.ts` with mutation, notifications, and list invalidation
-- [ ] T038 [P] [US5] Add `apps/dashboard/src/modules/menu-item/components/delete-menu-item-dialog.tsx` following the delete-confirmation pattern from Categories and Kitchen Sections
-- [ ] T039 [US5] Update `apps/dashboard/src/modules/menu-item/pages/menu-items-page.tsx` to wire delete actions, confirmation dialog flow, and list refresh after successful deletion
+- [x] T037 [P] [US5] Add `apps/dashboard/src/modules/menu-item/hooks/use-delete-menu-item.ts` with mutation, notifications, and list invalidation
+- [x] T038 [P] [US5] Add `apps/dashboard/src/modules/menu-item/components/delete-menu-item-dialog.tsx` following the delete-confirmation pattern from Categories and Kitchen Sections
+- [x] T039 [US5] Update `apps/dashboard/src/modules/menu-item/pages/menu-items-page.tsx` to wire delete actions, confirmation dialog flow, and list refresh after successful deletion
 
 **Checkpoint**: Delete flow is complete and independently verifiable.
 

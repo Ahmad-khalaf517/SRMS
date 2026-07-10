@@ -36,6 +36,10 @@
       "types": "./src/http/index.ts",
       "import": "./src/http/index.ts"
     },
+    "./menu-item": {
+      "types": "./src/menu-item/index.ts",
+      "import": "./src/menu-item/index.ts"
+    },
     "./orders": {
       "types": "./src/orders/index.ts",
       "import": "./src/orders/index.ts"
