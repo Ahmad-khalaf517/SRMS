@@ -19,3 +19,4 @@ export * from './categories.js';
 export * from './kitchen-section.js';
 export * from './menu-item.js';
 export * from './orders.js';
+export * from './user.js';

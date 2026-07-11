@@ -1,8 +1,10 @@
 import { Restaurant } from '../restaurant';
 import { User } from '../user/user.types';
 
+type SessionUser = Omit<User, 'createdAt' | 'updatedAt'>;
+
 export type AuthData = {
-  user: User;
+  user: SessionUser;
   accessToken: string;
   refreshToken?: string;
   restaurant: Restaurant | null;

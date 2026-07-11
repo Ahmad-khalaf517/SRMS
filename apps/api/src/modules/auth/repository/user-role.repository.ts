@@ -1,4 +1,4 @@
-import { CreateUserRoleDTO, USER_ROLE } from '@srms/api-contracts/user';
+import { CreateUserRoleDTO, USER_ROLE, type UserRole } from '@srms/api-contracts/user';
 import { ClientSession, model, Schema, type InferSchemaType, type Types } from 'mongoose';
 
 const userRoleSchema = new Schema(
@@ -39,4 +39,75 @@ export const findActiveRoleForUserInRestaurant = async (
   restaurantId: string,
 ): Promise<UserRoleDocument | null> => {
   return UserRoleModel.findOne({ userId, restaurantId, isActive: true });
+};
+
+export const findRoleForUserInRestaurant = async (
+  userId: string,
+  restaurantId: string,
+): Promise<UserRoleDocument | null> => {
+  return UserRoleModel.findOne({ userId, restaurantId });
+};
+
+export const findRolesByRestaurant = async (
+  restaurantId: string,
+  page: number,
+  limit: number,
+  excludeUserId?: string,
+): Promise<{ docs: UserRoleDocument[]; total: number }> => {
+  const skip = (page - 1) * limit;
+  const filter: { restaurantId: string; userId?: { $ne: string } } = { restaurantId };
+  if (excludeUserId) {
+    filter.userId = { $ne: excludeUserId };
+  }
+
+  const [docs, total] = await Promise.all([
+    UserRoleModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+    UserRoleModel.countDocuments(filter),
+  ]);
+
+  return { docs, total };
+};
+
+export const countActiveAdminsByRestaurant = async (restaurantId: string): Promise<number> => {
+  return UserRoleModel.countDocuments({
+    restaurantId,
+    role: USER_ROLE.ADMIN,
+    isActive: true,
+  });
+};
+
+export const updateRoleForUserInRestaurant = async (
+  userId: string,
+  restaurantId: string,
+  role: UserRole,
+): Promise<UserRoleDocument | null> => {
+  return UserRoleModel.findOneAndUpdate(
+    { userId, restaurantId },
+    { $set: { role } },
+    { new: true },
+  );
+};
+
+export const updateRoleActiveForUserInRestaurant = async (
+  userId: string,
+  restaurantId: string,
+  isActive: boolean,
+): Promise<UserRoleDocument | null> => {
+  return UserRoleModel.findOneAndUpdate(
+    { userId, restaurantId },
+    { $set: { isActive } },
+    { new: true },
+  );
+};
+
+export const deleteRolesForUserInRestaurant = async (
+  userId: string,
+  restaurantId: string,
+): Promise<number> => {
+  const result = await UserRoleModel.deleteMany({ userId, restaurantId });
+  return result.deletedCount ?? 0;
+};
+
+export const countRolesForUser = async (userId: string): Promise<number> => {
+  return UserRoleModel.countDocuments({ userId });
 };
