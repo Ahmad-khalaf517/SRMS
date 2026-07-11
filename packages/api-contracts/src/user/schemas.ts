@@ -6,6 +6,8 @@ export const CreateUserSchema = z.object({
   name: z.string().trim().min(1, 'Name is required'),
   email: z.string().trim().email('Invalid email'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
+  role: z.enum(USER_ROLE).optional(),
+  isActive: z.boolean().optional(),
 });
 
 export const CreateUserRoleSchema = z.object({
@@ -32,6 +34,8 @@ export const UpdateUserSchema = z
     name: z.string().trim().min(1, 'Name is required').optional(),
     email: z.string().trim().email('Invalid email').optional(),
     password: z.string().min(8, 'Password must be at least 8 characters').optional(),
+    role: z.enum(USER_ROLE).optional(),
+    isActive: z.boolean().optional(),
   })
   .refine(
     (data) => Object.keys(data).length > 0 && Object.values(data).some((v) => v !== undefined),

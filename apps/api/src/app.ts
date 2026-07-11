@@ -5,6 +5,7 @@ import healthRoutes from '@/modules/health/routes/health.routes';
 import authRoutes from '@/modules/auth/routes/auth.routes';
 import categoryRoutes from '@/modules/categories/routes/category.routes';
 import menuItemRoutes from '@/modules/menu-item/routes/menu-item.routes';
+import userRoutes from '@/modules/user/routes/user.routes';
 import { errorHandler, requestLogger, notFoundHandler } from '@/shared/http/middleware/index';
 import { env } from '@/config/env';
 import kitchenSectionRoutes from '@/modules/kitchen-section/routes/kitchen-section.routes';
@@ -37,6 +38,7 @@ app.use(BASE_URL, authRoutes);
 app.use(BASE_URL, categoryRoutes);
 app.use(BASE_URL, kitchenSectionRoutes);
 app.use(BASE_URL, menuItemRoutes);
+app.use(BASE_URL, userRoutes);
 
 // 404 handler
 app.use(notFoundHandler);

@@ -23,10 +23,25 @@ export const findUserById = async (id: string): Promise<UserDocument | null> => 
   return UserModel.findById(id);
 };
 
+export const findUsersByIds = async (ids: string[]): Promise<UserDocument[]> => {
+  return UserModel.find({ _id: { $in: ids } });
+};
+
 export const createUser = async (
   payload: CreateUserDTO,
   session?: ClientSession,
 ): Promise<UserDocument> => {
   const [user] = await UserModel.create([payload], { session });
   return user;
+};
+
+export const updateUserById = async (
+  id: string,
+  payload: Partial<Pick<UserDocument, 'name' | 'email' | 'password' | 'isActive'>>,
+): Promise<UserDocument | null> => {
+  return UserModel.findByIdAndUpdate(id, { $set: payload }, { new: true });
+};
+
+export const deleteUserById = async (id: string): Promise<UserDocument | null> => {
+  return UserModel.findByIdAndDelete(id);
 };

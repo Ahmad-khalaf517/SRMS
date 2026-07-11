@@ -14,6 +14,7 @@ import AuthLayout from '@/layouts/AuthLayout';
 import NAV_LINKS from '@/app/constants/nav-links';
 import KitchenSectionsPage from '@/modules/kitchen-section/pages/kitchen-section-page';
 import MenuItemsPage from '@/modules/menu-item/pages/menu-items-page';
+import UserPage from '@/modules/user/pages/user-page';
 
 export default function AppRoutes() {
   return (
@@ -26,8 +27,10 @@ export default function AppRoutes() {
             <Route path={NAV_LINKS.ADMIN.CATEGORIES.to} element={<CategoriesPage />} />
             <Route path={NAV_LINKS.ADMIN.KITCHEN.to} element={<KitchenSectionsPage />} />
             <Route path={NAV_LINKS.ADMIN.MENU_ITEMS.to} element={<MenuItemsPage />} />
+            <Route path={NAV_LINKS.ADMIN.USERS.to} element={<UserPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
+          <Route path="/" element={<DashboardPage />} />
         </Route>
         <Route path="/403" element={<ForbiddenPage />} />
       </Route>

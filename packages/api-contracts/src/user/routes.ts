@@ -1,4 +1,4 @@
 export const USER_ENDPOINTS = {
-  BASE: '/user',
-  BY_ID: (id: string) => `/user/${id}`,
+  BASE: '/users',
+  BY_ID: (id: string) => `/users/${id}`,
 } as const;

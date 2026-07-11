@@ -1,77 +1,124 @@
-import { type CreateUserDTO, type UpdateUserDTO } from '@srms/api-contracts';
-import { model, Schema, type InferSchemaType, type Types } from 'mongoose';
+import type { CreateUserDTO, UserRole } from '@srms/api-contracts';
 
-const UserSchema = new Schema(
-  {
-    name: { type: String, required: true, trim: true },
-    email: { type: String, required: true, trim: true },
-    password: { type: String, required: true, trim: true },
-    restaurantId: { type: Schema.Types.ObjectId, ref: 'Restaurant', required: true },
-  },
-  { timestamps: true },
-);
+import {
+  createUser as createAuthUser,
+  deleteUserById as deleteAuthUserById,
+  findUserByEmail,
+  findUserById,
+  findUsersByIds,
+  type UserDocument,
+  updateUserById,
+} from '@/modules/auth/repository/user.repository';
+import {
+  countActiveAdminsByRestaurant,
+  countRolesForUser,
+  createUserRole,
+  deleteRolesForUserInRestaurant,
+  findRoleForUserInRestaurant,
+  findRolesByRestaurant,
+  updateRoleActiveForUserInRestaurant,
+  updateRoleForUserInRestaurant,
+  type UserRoleDocument,
+} from '@/modules/auth/repository/user-role.repository';
 
-UserSchema.index({ restaurantId: 1 });
-UserSchema.index({ restaurantId: 1, createdAt: -1 });
-UserSchema.index({ name: 1, restaurantId: 1 }, { unique: true });
+export { type UserDocument, type UserRoleDocument };
 
-export type UserDocument = InferSchemaType<typeof UserSchema> & { _id: Types.ObjectId };
-
-const UserModel = model<UserDocument>('User', UserSchema);
-
-type PaginatedResult = {
-  docs: UserDocument[];
-  total: number;
+export const findUserByEmailAddress = async (email: string): Promise<UserDocument | null> => {
+  return findUserByEmail(email);
 };
 
-export const findUserByRestaurant = async (
+export const findUserByIdInRestaurant = async (
+  userId: string,
+  restaurantId: string,
+): Promise<{ user: UserDocument; role: UserRoleDocument } | null> => {
+  const [user, role] = await Promise.all([
+    findUserById(userId),
+    findRoleForUserInRestaurant(userId, restaurantId),
+  ]);
+
+  if (!user || !role) {
+    return null;
+  }
+
+  return { user, role };
+};
+
+export const listUsersByRestaurant = async (
   restaurantId: string,
   page: number,
   limit: number,
-): Promise<PaginatedResult> => {
-  const skip = (page - 1) * limit;
-  const [docs, total] = await Promise.all([
-    UserModel.find({ restaurantId }).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
-    UserModel.countDocuments({ restaurantId }),
-  ]);
-  return { docs: docs as UserDocument[], total };
-};
-
-export const findUserById = async (
-  id: string,
-  restaurantId: string,
-): Promise<UserDocument | null> => {
-  return UserModel.findOne({
-    _id: id,
+  excludeUserId?: string,
+): Promise<{ docs: Array<{ user: UserDocument; role: UserRoleDocument }>; total: number }> => {
+  const { docs: roleDocs, total } = await findRolesByRestaurant(
     restaurantId,
-  }).lean() as Promise<UserDocument | null>;
+    page,
+    limit,
+    excludeUserId,
+  );
+  if (roleDocs.length === 0) {
+    return { docs: [], total };
+  }
+
+  const users = await findUsersByIds(roleDocs.map((roleDoc) => roleDoc.userId.toString()));
+  const userById = new Map(users.map((user) => [user._id.toString(), user]));
+
+  const docs = roleDocs
+    .map((roleDoc) => {
+      const user = userById.get(roleDoc.userId.toString());
+      return user ? { user, role: roleDoc } : null;
+    })
+    .filter((entry): entry is { user: UserDocument; role: UserRoleDocument } => entry !== null);
+
+  return { docs, total };
 };
 
-export const createUser = async (
-  payload: CreateUserDTO & { restaurantId: string },
-): Promise<UserDocument> => {
-  const doc = await UserModel.create(payload);
-  return doc.toObject() as UserDocument;
-};
-
-export const updateUserById = async (
-  id: string,
+export const createUserWithRole = async (
   restaurantId: string,
-  payload: UpdateUserDTO,
-): Promise<UserDocument | null> => {
-  return UserModel.findOneAndUpdate(
-    { _id: id, restaurantId },
-    { $set: payload },
-    { new: true },
-  ).lean() as Promise<UserDocument | null>;
+  payload: CreateUserDTO,
+  role: UserRole,
+): Promise<{ user: UserDocument; role: UserRoleDocument }> => {
+  const user = await createAuthUser(payload);
+  const roleDoc = await createUserRole({ userId: user._id.toString(), restaurantId, role });
+  return { user, role: roleDoc };
 };
 
-export const deleteUserById = async (
-  id: string,
-  restaurantId: string,
+export const updateUserRecord = async (
+  userId: string,
+  payload: Partial<Pick<UserDocument, 'name' | 'email' | 'password' | 'isActive'>>,
 ): Promise<UserDocument | null> => {
-  return UserModel.findOneAndDelete({
-    _id: id,
-    restaurantId,
-  }).lean() as Promise<UserDocument | null>;
+  return updateUserById(userId, payload);
+};
+
+export const updateUserRole = async (
+  userId: string,
+  restaurantId: string,
+  role: UserRole,
+): Promise<UserRoleDocument | null> => {
+  return updateRoleForUserInRestaurant(userId, restaurantId, role);
+};
+
+export const updateUserRoleActive = async (
+  userId: string,
+  restaurantId: string,
+  isActive: boolean,
+): Promise<UserRoleDocument | null> => {
+  return updateRoleActiveForUserInRestaurant(userId, restaurantId, isActive);
+};
+
+export const deleteUserInRestaurant = async (
+  userId: string,
+  restaurantId: string,
+): Promise<number> => {
+  return deleteRolesForUserInRestaurant(userId, restaurantId);
+};
+
+export const deleteUserIfOrphaned = async (userId: string): Promise<void> => {
+  const rolesCount = await countRolesForUser(userId);
+  if (rolesCount === 0) {
+    await deleteAuthUserById(userId);
+  }
+};
+
+export const countActiveAdmins = async (restaurantId: string): Promise<number> => {
+  return countActiveAdminsByRestaurant(restaurantId);
 };
