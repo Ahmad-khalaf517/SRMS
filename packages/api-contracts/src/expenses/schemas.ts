@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { PaginationQuerySchema } from '../http/schemas';
 const expenseNo = z.string().regex(/^EXP-\d{8}-\d{4}$/, 'Invalid expense number format');
 const expenseTypeId = z.string().min(1, 'Expense type is required');
 const title = z.string().min(3, 'Title must be at least 3 characters').max(150);
@@ -30,6 +31,8 @@ export const UpdateExpensesSchema = z.object({
   restaurantId: restaurantId.optional(),
   createdBy: createdBy.optional(),
 });
+export const ExpensesQuerySchema = PaginationQuerySchema;
 
 export type CreateExpensesDTO = z.infer<typeof CreateExpensesSchema>;
 export type UpdateExpensesDTO = z.infer<typeof UpdateExpensesSchema>;
+export type ExpensesQuery = z.infer<typeof ExpensesQuerySchema>;
