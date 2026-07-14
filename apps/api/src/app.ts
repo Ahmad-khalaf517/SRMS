@@ -10,6 +10,7 @@ import userRoutes from '@/modules/user/routes/user.routes';
 import { errorHandler, requestLogger, notFoundHandler } from '@/shared/http/middleware/index';
 import { env } from '@/config/env';
 import kitchenSectionRoutes from '@/modules/kitchen-section/routes/kitchen-section.routes';
+import expenseRoutes from '@/modules/expenses/routes/expenses.routes';
 
 const API_VERSION = env.API_VERSION ?? '1';
 const BASE_URL = `/api/v${API_VERSION}`;
@@ -41,12 +42,12 @@ app.use(BASE_URL, kitchenSectionRoutes);
 app.use(BASE_URL, menuItemRoutes);
 app.use(BASE_URL, ordersRoutes);
 app.use(BASE_URL, userRoutes);
+app.use(BASE_URL, expenseRoutes);
 
 // 404 handler
 app.use(notFoundHandler);
 
 // Global error handler
 app.use(errorHandler);
-
 export default app;
 export { BASE_URL };
