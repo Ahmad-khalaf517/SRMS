@@ -20,6 +20,7 @@ import KitchenOrdersPage from '@/modules/orders/pages/kitchen-orders-page';
 import AdminOrdersPage from '@/modules/orders/pages/admin-orders-page';
 import { RedirectUserRole } from '@/modules/auth/components/redirect-user-role';
 import UserPage from '@/modules/user/pages/user-page';
+import ExpensesPage from '@/modules/expenses/pages/expenses-page';
 
 export default function AppRoutes() {
   return (
@@ -36,6 +37,7 @@ export default function AppRoutes() {
             <Route path={NAV_LINKS.ADMIN.MENU_ITEMS.to} element={<MenuItemsPage />} />
             <Route path={NAV_LINKS.ADMIN.ORDERS.to} element={<AdminOrdersPage />} />
             <Route path={NAV_LINKS.ADMIN.USERS.to} element={<UserPage />} />
+            <Route path={NAV_LINKS.ADMIN.EXPENSES.to} element={<ExpensesPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

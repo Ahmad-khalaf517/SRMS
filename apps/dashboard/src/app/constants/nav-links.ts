@@ -1,4 +1,4 @@
-import { ChefHat, LayoutDashboard, LayoutList, Shapes, Users } from 'lucide-react';
+import { ChefHat, LayoutDashboard, LayoutList, Shapes, Users, DollarSign } from 'lucide-react';
 // Admin navigation links
 const ADMIN_NAV_LINKS = {
   DASHBOARD: {
@@ -15,6 +15,11 @@ const ADMIN_NAV_LINKS = {
     title: 'Users',
     to: 'admin/users',
     icon: Users,
+  },
+  EXPENSES: {
+    title: 'Expenses',
+    to: 'admin/expenses',
+    icon: DollarSign,
   },
   KITCHEN: {
     title: 'Kitchen',
