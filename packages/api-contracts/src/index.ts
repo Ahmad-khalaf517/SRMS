@@ -8,3 +8,4 @@ export * from './payments/index.js';
 export * from './restaurant/index.js';
 export * from './user/index.js';
 export * from './kitchen-section/index.js';
+export * from './expenses-types/index.js';

@@ -69,4 +69,4 @@ export const ExpensesTypesQuerySchema = PaginationQuerySchema;
 
 export type CreateExpensesTypesDTO = z.infer<typeof CreateExpensesTypesSchema>;
 export type UpdateExpensesTypesDTO = z.infer<typeof UpdateExpensesTypesSchema>;
-export type CategoryQuery = z.infer<typeof ExpensesTypesQuerySchema>;
+export type ExpensesTypesQuery = z.infer<typeof ExpensesTypesQuerySchema>;

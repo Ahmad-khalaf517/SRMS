@@ -55,6 +55,10 @@
     "./kitchen-section": {
       "types": "./src/kitchen-section/index.ts",
       "import": "./src/kitchen-section/index.ts"
+    },
+    "./expenses-types": {
+      "types": "./src/expenses-types/index.ts",
+      "import": "./src/expenses-types/index.ts"
     }
   },
   "devDependencies": {
