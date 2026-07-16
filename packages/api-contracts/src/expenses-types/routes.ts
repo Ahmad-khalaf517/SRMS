@@ -1,4 +1,4 @@
-export const Expenses_Types_ENDPOINTS = {
+export const EXPENSES_TYPES_ENDPOINTS = {
   BASE: '/expenses-types',
   BY_ID: (id: string) => `/expenses-types/${id}`,
 } as const;

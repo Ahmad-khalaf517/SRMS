@@ -76,12 +76,10 @@ export default function ExpensesTypesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold">Categories</h1>
-          <p className="text-sm text-muted-foreground">
-            Manage menu categories for your restaurant
-          </p>
+          <h1 className="text-xl font-semibold">Expenses Types</h1>
+          <p className="text-sm text-muted-foreground">Manage expenses types for your restaurant</p>
         </div>
-        {isAdmin && <Button onClick={() => setCreateOpen(true)}>New Category</Button>}
+        {isAdmin && <Button onClick={() => setCreateOpen(true)}>New Expenses Type</Button>}
       </div>
 
       {/* Table */}

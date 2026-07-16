@@ -137,7 +137,7 @@ export function ExpensesTypesForm({
   );
 }
 
-// Helper to get default values from an existing category record
+// Helper to get default values from an existing expenses types record
 // eslint-disable-next-line react-refresh/only-export-components
 export function expensesTypesToFormValues(
   expensesType: ExpensesTypes,
