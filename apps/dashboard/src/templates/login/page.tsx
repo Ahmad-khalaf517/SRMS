@@ -1,7 +1,7 @@
 import { GalleryVerticalEnd } from 'lucide-react';
 
 import LoginForm from '@/modules/auth/components/login-form';
-
+import loginImage from '@/assets/login.jpeg';
 export default function Login() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
@@ -20,12 +20,31 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <div className="relative hidden bg-muted lg:block">
+      <div className="relative hidden overflow-hidden bg-muted lg:block">
         <img
-          src="https://ui.shadcn.com/placeholder.svg"
-          alt="Place holder image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          src={loginImage}
+          alt="SRMS restaurant"
+          className="absolute inset-0 h-full w-full object-cover"
         />
+
+        <svg
+          viewBox="0 0 220 1000"
+          preserveAspectRatio="none"
+          className="absolute left-0 top-0 z-10 h-full w-[200px]"
+        >
+          <path
+            d="
+        M 0 0
+        H 100
+        C 190 120, 190 300, 105 410
+        C 20 520, 20 700, 110 820
+        C 175 910, 165 970, 100 1000
+        H 0
+        Z
+      "
+            fill="white"
+          />
+        </svg>
       </div>
     </div>
   );

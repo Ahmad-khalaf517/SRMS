@@ -1,3 +1,4 @@
+import loginImage from '@/assets/login.jpeg';
 import { cn } from '@srms/ui/lib/utils';
 import { Button } from '@srms/ui/components/button';
 import { Card, CardContent } from '@srms/ui/components/card';
@@ -162,9 +163,9 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
           </form>
           <div className="relative hidden bg-muted md:block">
             <img
-              src="https://ui.shadcn.com/placeholder.svg"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              src={loginImage}
+              alt="SRMS restaurant"
+              className="absolute inset-0 h-full w-full object-cover"
             />
           </div>
         </CardContent>
