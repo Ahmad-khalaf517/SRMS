@@ -57,6 +57,8 @@ export type OrderMetrics = {
   totalRevenue: number;
   totalOrders: number;
   pendingOrders: number;
+  readyOrders: number;
+  completedOrders: number;
 };
 
 export type TopSellingItem = {

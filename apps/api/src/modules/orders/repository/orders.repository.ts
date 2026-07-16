@@ -241,6 +241,16 @@ export const getOrderMetrics = async (
             $cond: [{ $in: ['$status', [ORDER_STATUS.PENDING, ORDER_STATUS.PREPARING]] }, 1, 0],
           },
         },
+        readyOrders: {
+          $sum: {
+            $cond: [{ $eq: ['$status', ORDER_STATUS.READY] }, 1, 0],
+          },
+        },
+        completedOrders: {
+          $sum: {
+            $cond: [{ $eq: ['$status', ORDER_STATUS.COMPLETED] }, 1, 0],
+          },
+        },
       },
     },
   ]);
@@ -249,6 +259,8 @@ export const getOrderMetrics = async (
     totalRevenue: result[0]?.totalRevenue ?? 0,
     totalOrders: result[0]?.totalOrders ?? 0,
     pendingOrders: result[0]?.pendingOrders ?? 0,
+    readyOrders: result[0]?.readyOrders ?? 0,
+    completedOrders: result[0]?.completedOrders ?? 0,
   };
 };
 
