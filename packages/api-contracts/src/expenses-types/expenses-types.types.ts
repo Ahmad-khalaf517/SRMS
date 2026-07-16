@@ -10,6 +10,7 @@ export type ExpensesTypes = {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  restaurantId: string;
 };
 
 export type ExpensesTypesList = {

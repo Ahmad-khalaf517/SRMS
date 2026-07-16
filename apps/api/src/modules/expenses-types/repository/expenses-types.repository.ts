@@ -6,6 +6,10 @@ const expensesTypesSchema = new Schema(
     name: { type: String, required: true, trim: true },
     description: { type: String, trim: true },
     restaurantId: { type: Schema.Types.ObjectId, ref: 'Restaurant', required: true },
+    color: { type: String, required: true, default: '#000000' },
+    code: { type: String, required: true, default: '' },
+    isActive: { type: Boolean, required: true, default: true },
+    icon: { type: String, required: true, default: '' },
   },
   { timestamps: true },
 );

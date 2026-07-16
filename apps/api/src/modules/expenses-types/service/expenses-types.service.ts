@@ -13,11 +13,15 @@ import {
   updateExpensesTypesById,
 } from '@/modules/expenses-types/repository/expenses-types.repository';
 import { ConflictError, NotFoundError } from '@/shared/errors/app-error';
-import type { ExpensesTypesDocument } from '@/modules/categories/repository/category.repository';
+import type { ExpensesTypesDocument } from '@/modules/expenses-types/repository/expenses-types.repository';
 
 const toDTO = (doc: ExpensesTypesDocument): ExpensesTypes => ({
   id: doc._id.toString(),
+  isActive: doc.isActive,
   name: doc.name as string,
+  code: doc.code as string,
+  color: doc.color as string,
+  icon: doc.icon as string,
   description: doc.description as string | undefined,
   restaurantId: doc.restaurantId.toString(),
   createdAt: (doc.createdAt as Date).toISOString(),
@@ -49,6 +53,10 @@ export const createExpensesTypesService = async (
 
   const doc = await dbCreateExpensesTypes({
     name: trimmedName,
+    isActive: dto.isActive,
+    code: dto.code?.trim(),
+    color: dto.color?.trim(),
+    icon: dto.icon?.trim(),
     description: dto.description?.trim(),
     restaurantId,
   });
