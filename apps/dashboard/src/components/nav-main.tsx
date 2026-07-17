@@ -42,7 +42,7 @@ export function NavMain() {
               <SidebarMenuButton
                 onClick={() => navigate(item.to)}
                 tooltip={item.title}
-                className={activePath === item.to ? activeItemClassName : ''}
+                className={`${activePath === item.to ? activeItemClassName : ''} cursor-pointer`}
               >
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
