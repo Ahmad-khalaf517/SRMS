@@ -30,6 +30,7 @@ type PosOrderSummaryProps = {
   onUpdateNotes: (menuItemId: string, notes?: string) => void;
   onClear: () => void;
   onSubmit: () => void;
+  highlightToken?: number;
 };
 
 export function PosOrderSummary({
@@ -45,9 +46,17 @@ export function PosOrderSummary({
   onUpdateNotes,
   onClear,
   onSubmit,
+  highlightToken,
 }: PosOrderSummaryProps) {
+  const highlightClass =
+    highlightToken && highlightToken > 0
+      ? highlightToken % 2 === 0
+        ? 'ring-2 ring-primary/45 shadow-lg -translate-y-0.5 animate-[pulse_380ms_ease-in-out_1]'
+        : 'ring-2 ring-primary/45 shadow-lg -translate-y-0.5 animate-[bounce_320ms_ease-out_1]'
+      : 'ring-0 shadow-sm';
+
   return (
-    <Card>
+    <Card className={'transition-all duration-300 ' + highlightClass}>
       <CardHeader>
         <CardTitle>Current Order</CardTitle>
         <CardDescription>Review, adjust quantities, and place the order.</CardDescription>

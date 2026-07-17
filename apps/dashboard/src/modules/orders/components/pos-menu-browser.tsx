@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
-import { Button } from '@srms/ui/components/button';
 import { Input } from '@srms/ui/components/input';
 import {
   Card,
@@ -15,16 +14,11 @@ type PosMenuBrowserProps = {
   menuItems: MenuItemListItem[];
   isLoading: boolean;
   onAddItem: (item: MenuItemListItem) => void;
-  addingItemId?: string | null;
 };
 
-export function PosMenuBrowser({
-  menuItems,
-  isLoading,
-  onAddItem,
-  addingItemId = null,
-}: PosMenuBrowserProps) {
+export function PosMenuBrowser({ menuItems, isLoading, onAddItem }: PosMenuBrowserProps) {
   const [search, setSearch] = useState('');
+  const [animatingItemId, setAnimatingItemId] = useState<string | null>(null);
 
   const filteredItems = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -65,7 +59,43 @@ export function PosMenuBrowser({
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 ">
             {filteredItems.map((item) => (
-              <Card key={item.id} size="sm" className="border border-border/60">
+              <Card
+                key={item.id}
+                size="sm"
+                role="button"
+                tabIndex={item.isAvailable ? 0 : -1}
+                aria-disabled={!item.isAvailable}
+                onClick={() => {
+                  if (!item.isAvailable) {
+                    return;
+                  }
+
+                  onAddItem(item);
+                  setAnimatingItemId(item.id);
+                  window.setTimeout(() => {
+                    setAnimatingItemId((current) => (current === item.id ? null : current));
+                  }, 420);
+                }}
+                onKeyDown={(event) => {
+                  if (!item.isAvailable) {
+                    return;
+                  }
+
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    onAddItem(item);
+                    setAnimatingItemId(item.id);
+                    window.setTimeout(() => {
+                      setAnimatingItemId((current) => (current === item.id ? null : current));
+                    }, 420);
+                  }
+                }}
+                className={
+                  'border border-border/60 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ' +
+                  (item.isAvailable ? 'cursor-pointer' : 'opacity-60 cursor-not-allowed') +
+                  (animatingItemId === item.id ? ' translate-x-3 scale-[0.97] opacity-70' : '')
+                }
+              >
                 <CardHeader className="space-y-2">
                   <div className="flex items-start justify-between gap-2">
                     <CardTitle className="text-sm">{item.name}</CardTitle>
@@ -76,14 +106,9 @@ export function PosMenuBrowser({
                 </CardHeader>
                 <CardContent className="flex items-center justify-between">
                   <p className="text-sm font-medium">${item.price.toFixed(2)}</p>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={!item.isAvailable || addingItemId === item.id}
-                    onClick={() => onAddItem(item)}
-                  >
-                    {addingItemId === item.id ? 'Adding...' : 'Add'}
-                  </Button>
+                  <span className="text-xs text-muted-foreground">
+                    {item.isAvailable ? 'Click to add' : 'Unavailable'}
+                  </span>
                 </CardContent>
               </Card>
             ))}

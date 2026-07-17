@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import { useMenuItems } from '@/modules/menu-item/hooks/use-menu-items';
@@ -11,6 +11,8 @@ import { usePosCartStore } from '@/modules/orders/store/pos-cart.store';
 const TAX_RATE = 0.1;
 
 export default function PosPage() {
+  const [cartHighlightToken, setCartHighlightToken] = useState(0);
+
   const menuItemsQuery = useMenuItems({ page: 1, limit: 100, isAvailable: true });
   const createOrderMutation = useCreateOrder();
 
@@ -61,6 +63,18 @@ export default function PosPage() {
     [addItem, items],
   );
 
+  const handleAddItemFromMenu = useCallback(
+    (item: (typeof menuItems)[number]) => {
+      addItem({
+        menuItemId: item.id,
+        name: item.name,
+        price: item.price,
+      });
+      setCartHighlightToken((value) => value + 1);
+    },
+    [addItem],
+  );
+
   return (
     <div className="grow flex flex-col gap-6 p-4 lg:p-6 overflow-hidden">
       <div>
@@ -74,13 +88,7 @@ export default function PosPage() {
         <PosMenuBrowser
           menuItems={menuItems}
           isLoading={menuItemsQuery.isLoading}
-          onAddItem={(item) =>
-            addItem({
-              menuItemId: item.id,
-              name: item.name,
-              price: item.price,
-            })
-          }
+          onAddItem={handleAddItemFromMenu}
         />
 
         <PosOrderSummary
@@ -96,6 +104,7 @@ export default function PosPage() {
           onUpdateNotes={updateNotes}
           onClear={clearCart}
           onSubmit={onPlaceOrder}
+          highlightToken={cartHighlightToken}
         />
       </div>
     </div>
