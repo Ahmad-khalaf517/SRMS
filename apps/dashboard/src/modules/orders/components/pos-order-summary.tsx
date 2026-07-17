@@ -1,98 +1,118 @@
-import { Button } from '@srms/ui/components/button';
+import { ORDER_STATUS, type OrderStatus } from '@srms/api-contracts/orders';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@srms/ui/components/card';
-import { PosCartPanel } from '@/modules/orders/components/pos-cart-panel';
+import { Skeleton } from '@srms/ui/components/skeleton';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@srms/ui/components/table';
+import { ClipboardList } from 'lucide-react';
 
-type CartItem = {
-  menuItemId: string;
-  name: string;
-  price: number;
-  quantity: number;
-  notes?: string;
+import { useOrders } from '@/modules/orders/hooks';
+
+const currency = new Intl.NumberFormat(undefined, {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 2,
+});
+
+const STATUS_STYLES: Record<OrderStatus, string> = {
+  [ORDER_STATUS.PENDING]: 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400',
+  [ORDER_STATUS.PREPARING]:
+    'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400',
+  [ORDER_STATUS.READY]:
+    'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400',
+  [ORDER_STATUS.COMPLETED]: 'bg-slate-100 text-slate-600 dark:bg-zinc-800 dark:text-zinc-300',
+  [ORDER_STATUS.CANCELLED]: 'bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400',
 };
 
-type PosOrderSummaryProps = {
-  items: CartItem[];
-  subtotal: number;
-  tax: number;
-  total: number;
-  canSubmit: boolean;
-  isSubmitting: boolean;
-  onDecrement: (menuItemId: string) => void;
-  onIncrement: (menuItemId: string) => void;
-  onRemove: (menuItemId: string) => void;
-  onUpdateNotes: (menuItemId: string, notes?: string) => void;
-  onClear: () => void;
-  onSubmit: () => void;
-};
+const formatDate = (value: string) =>
+  new Date(value).toLocaleString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
-export function PosOrderSummary({
-  items,
-  subtotal,
-  tax,
-  total,
-  canSubmit,
-  isSubmitting,
-  onDecrement,
-  onIncrement,
-  onRemove,
-  onUpdateNotes,
-  onClear,
-  onSubmit,
-}: PosOrderSummaryProps) {
+export function RecentOrdersTable() {
+  const ordersQuery = useOrders({ page: 1, limit: 8 });
+  const orders = ordersQuery.data?.data.data ?? [];
+  const isLoading = ordersQuery.isLoading;
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Current Order</CardTitle>
-        <CardDescription>Review, adjust quantities, and place the order.</CardDescription>
+    <Card className="@container/card relative overflow-hidden border-slate-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <CardHeader className="p-6">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-sky-50 text-sky-600 dark:bg-sky-500/10 dark:text-sky-400">
+            <ClipboardList className="h-4 w-4" />
+          </div>
+          <div>
+            <CardTitle className="text-base font-semibold text-slate-900 dark:text-zinc-50">
+              Recent Orders
+            </CardTitle>
+            <CardDescription className="text-sm text-slate-500 dark:text-zinc-400">
+              The latest orders placed across the restaurant.
+            </CardDescription>
+          </div>
+        </div>
       </CardHeader>
-
-      <CardContent className="grow flex flex-col gap-4 overflow-hidden">
-        <PosCartPanel
-          items={items}
-          onDecrement={onDecrement}
-          onIncrement={onIncrement}
-          onRemove={onRemove}
-          onUpdateNotes={onUpdateNotes}
-        />
+      <CardContent className="px-6 pb-6">
+        {isLoading ? (
+          <div className="space-y-3">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <Skeleton key={index} className="h-10 w-full rounded-lg" />
+            ))}
+          </div>
+        ) : ordersQuery.isError ? (
+          <p className="text-sm text-muted-foreground">Failed to load recent orders.</p>
+        ) : orders.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No orders yet.</p>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Order #</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Total</TableHead>
+                <TableHead>Created By</TableHead>
+                <TableHead>Created At</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {orders.map((order) => (
+                <TableRow key={order.id}>
+                  <TableCell className="font-medium text-slate-900 dark:text-zinc-50">
+                    {order.orderNumber}
+                  </TableCell>
+                  <TableCell>
+                    <span
+                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[order.status]}`}
+                    >
+                      {order.status}
+                    </span>
+                  </TableCell>
+                  <TableCell>{currency.format(order.total)}</TableCell>
+                  <TableCell className="text-slate-500 dark:text-zinc-400">
+                    {order.createdByName ?? order.createdBy}
+                  </TableCell>
+                  <TableCell className="text-slate-500 dark:text-zinc-400">
+                    {formatDate(order.createdAt)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </CardContent>
-
-      <CardFooter className="flex flex-col items-stretch gap-3 mt-auto">
-        <div className="space-y-1 text-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Subtotal</span>
-            <span>${subtotal.toFixed(2)}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Tax (10%)</span>
-            <span>${tax.toFixed(2)}</span>
-          </div>
-          <div className="flex items-center justify-between font-semibold">
-            <span>Total</span>
-            <span>${total.toFixed(2)}</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            className="flex-1"
-            disabled={items.length === 0}
-            onClick={onClear}
-          >
-            Clear
-          </Button>
-          <Button className="flex-1" disabled={!canSubmit || isSubmitting} onClick={onSubmit}>
-            {isSubmitting ? 'Placing...' : 'Place Order'}
-          </Button>
-        </div>
-      </CardFooter>
     </Card>
   );
 }

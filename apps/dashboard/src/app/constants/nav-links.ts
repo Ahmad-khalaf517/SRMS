@@ -16,6 +16,11 @@ const ADMIN_NAV_LINKS = {
     to: 'admin/users',
     icon: Users,
   },
+  EXPENSES_TYPES: {
+    title: 'Expenses Types',
+    to: 'admin/expenses-types',
+    icon: LayoutList,
+  },
   KITCHEN: {
     title: 'Kitchen',
     to: 'admin/kitchen',
