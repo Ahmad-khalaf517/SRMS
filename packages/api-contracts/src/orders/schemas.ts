@@ -8,6 +8,7 @@ const OrderStatusSchema = z.enum([
   ORDER_STATUS.PREPARING,
   ORDER_STATUS.READY,
   ORDER_STATUS.COMPLETED,
+  ORDER_STATUS.CANCELLED,
 ]);
 
 export const CreateOrderItemSchema = z.object({

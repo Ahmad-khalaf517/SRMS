@@ -1,11 +1,11 @@
-import { ChartAreaInteractive } from '@/modules/dashboard/components/chart-area-interactive';
 import { OrderAnalyticsCards } from '@/modules/orders/components/order-analytics-cards';
 import { OrdersTable } from '@/modules/orders/components/order-table';
-import { useOrderMetrics, useTopSellingItems } from '@/modules/orders/hooks';
+import { useOrderMetrics, useOrders, useTopSellingItems } from '@/modules/orders/hooks';
 
 export default function DashboardPage() {
   const metricsQuery = useOrderMetrics({});
   const topSellingQuery = useTopSellingItems({ limit: 5 });
+  const ordersQuery = useOrders({ page: 1, limit: 8 });
 
   return (
     <div className="flex flex-1 flex-col">
@@ -17,10 +17,14 @@ export default function DashboardPage() {
             isLoading={metricsQuery.isLoading || topSellingQuery.isLoading}
           />
           <div className="px-4 lg:px-6">
-            <ChartAreaInteractive />
-          </div>
-          <div className="px-4 lg:px-6">
-            <OrdersTable />
+            <OrdersTable
+              title="Recent Orders"
+              description="The latest orders placed across the restaurant."
+              orders={ordersQuery.data?.data?.data ?? []}
+              isLoading={ordersQuery.isLoading}
+              error={ordersQuery.error}
+              errorMessage="Failed to load recent orders."
+            />
           </div>
         </div>
       </div>

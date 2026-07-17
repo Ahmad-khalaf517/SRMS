@@ -1,4 +1,4 @@
-import { ORDER_STATUS, type OrderStatus } from '@srms/api-contracts/orders';
+import { ORDER_STATUS, type OrderListResponse, type OrderStatus } from '@srms/api-contracts/orders';
 import {
   Card,
   CardContent,
@@ -16,8 +16,6 @@ import {
   TableRow,
 } from '@srms/ui/components/table';
 import { ClipboardList } from 'lucide-react';
-
-import { useOrders } from '@/modules/orders/hooks';
 
 const currency = new Intl.NumberFormat(undefined, {
   style: 'currency',
@@ -43,11 +41,23 @@ const formatDate = (value: string) =>
     minute: '2-digit',
   });
 
-export function OrdersTable() {
-  const ordersQuery = useOrders({ page: 1, limit: 8 });
-  const orders = ordersQuery.data?.data.data ?? [];
-  const isLoading = ordersQuery.isLoading;
+interface OrdersProps {
+  title: string;
+  description: string;
+  orders: OrderListResponse['data']['data'];
+  isLoading: boolean;
+  error?: unknown;
+  errorMessage: string;
+}
 
+export function OrdersTable({
+  title,
+  description,
+  orders,
+  isLoading,
+  error,
+  errorMessage,
+}: OrdersProps) {
   return (
     <Card className="@container/card relative overflow-hidden border-slate-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
       <CardHeader className="p-6">
@@ -57,10 +67,10 @@ export function OrdersTable() {
           </div>
           <div>
             <CardTitle className="text-base font-semibold text-slate-900 dark:text-zinc-50">
-              Recent Orders
+              {title}
             </CardTitle>
             <CardDescription className="text-sm text-slate-500 dark:text-zinc-400">
-              The latest orders placed across the restaurant.
+              {description}
             </CardDescription>
           </div>
         </div>
@@ -72,8 +82,8 @@ export function OrdersTable() {
               <Skeleton key={index} className="h-10 w-full rounded-lg" />
             ))}
           </div>
-        ) : ordersQuery.isError ? (
-          <p className="text-sm text-muted-foreground">Failed to load recent orders.</p>
+        ) : error ? (
+          <p className="text-sm text-muted-foreground">{errorMessage}</p>
         ) : orders.length === 0 ? (
           <p className="text-sm text-muted-foreground">No orders yet.</p>
         ) : (

@@ -1,17 +1,8 @@
 import { useMemo, useState } from 'react';
 import { ChevronDownIcon } from 'lucide-react';
-
 import { ORDER_STATUS, type OrderStatus } from '@srms/api-contracts/orders';
 import { Button } from '@srms/ui/components/button';
 import { Input } from '@srms/ui/components/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@srms/ui/components/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,9 +10,8 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@srms/ui/components/dropdown-menu';
-
-import { OrderAnalyticsCards } from '@/modules/orders/components/order-analytics-cards';
-import { useOrderMetrics, useOrders, useTopSellingItems } from '@/modules/orders/hooks';
+import { useOrders } from '@/modules/orders/hooks';
+import { OrdersTable } from '@/modules/orders/components/order-table';
 
 const DEFAULT_LIMIT = 10;
 
@@ -32,7 +22,6 @@ const toDateRange = (fromDate?: string, toDate?: string) => ({
 
 export default function AdminOrdersPage() {
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
   const [status, setStatus] = useState<string>('all');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
@@ -46,17 +35,13 @@ export default function AdminOrdersPage() {
     () => ({
       page,
       limit: DEFAULT_LIMIT,
-      search: search.trim() || undefined,
-      status: status === 'all' ? undefined : (status as OrderStatus),
+      ...(status === 'all' ? {} : { status: status as OrderStatus }),
       ...dateRange,
     }),
-    [dateRange, page, search, status],
+    [dateRange, page, status],
   );
 
   const ordersQuery = useOrders(orderFilters);
-  const metricsQuery = useOrderMetrics(dateRange);
-  const topSellingQuery = useTopSellingItems({ ...dateRange, limit: 5 });
-
   const orders = ordersQuery.data?.data.data ?? [];
   const pagination = ordersQuery.data?.data.pagination;
 
@@ -69,145 +54,107 @@ export default function AdminOrdersPage() {
         </p>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-4">
-        <Input
-          placeholder="Search order number"
-          value={search}
-          onChange={(event) => {
-            setSearch(event.target.value);
-            setPage(1);
-          }}
-        />
-
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <button
-                type="button"
-                className="flex h-8 w-full items-center justify-between gap-1.5 rounded-lg border border-input bg-transparent py-2 pr-2 pl-2.5 text-sm transition-colors outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+      <div className="grid gap-3 md:grid-cols-4 border p-3 rounded-lg">
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="status" className="text-sm font-medium">
+            Status
+          </label>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <button
+                  type="button"
+                  className="flex h-8 w-full items-center justify-between gap-1.5 rounded-lg border border-input bg-transparent py-2 pr-2 pl-2.5 text-sm transition-colors outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                >
+                  <span>{status === 'all' ? 'All statuses' : status}</span>
+                  <ChevronDownIcon className="size-4 text-muted-foreground" />
+                </button>
+              }
+            />
+            <DropdownMenuContent className="w-(--anchor-width)">
+              <DropdownMenuRadioGroup
+                value={status}
+                onValueChange={(value) => {
+                  setStatus(value);
+                  setPage(1);
+                }}
               >
-                <span>{status === 'all' ? 'All statuses' : status}</span>
-                <ChevronDownIcon className="size-4 text-muted-foreground" />
-              </button>
-            }
+                <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value={ORDER_STATUS.PENDING}>Pending</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value={ORDER_STATUS.PREPARING}>
+                  Preparing
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value={ORDER_STATUS.READY}>Ready</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value={ORDER_STATUS.COMPLETED}>
+                  Completed
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="from-date" className="text-sm font-medium">
+            From
+          </label>
+          <Input
+            type="date"
+            value={fromDate}
+            onChange={(event) => {
+              setFromDate(event.target.value);
+              setPage(1);
+            }}
           />
-          <DropdownMenuContent className="w-(--anchor-width)">
-            <DropdownMenuRadioGroup
-              value={status}
-              onValueChange={(value) => {
-                setStatus(value);
-                setPage(1);
-              }}
-            >
-              <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value={ORDER_STATUS.PENDING}>Pending</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value={ORDER_STATUS.PREPARING}>
-                Preparing
-              </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value={ORDER_STATUS.READY}>Ready</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value={ORDER_STATUS.COMPLETED}>
-                Completed
-              </DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        </div>
 
-        <Input
-          type="date"
-          value={fromDate}
-          onChange={(event) => {
-            setFromDate(event.target.value);
-            setPage(1);
-          }}
-        />
-
-        <Input
-          type="date"
-          value={toDate}
-          onChange={(event) => {
-            setToDate(event.target.value);
-            setPage(1);
-          }}
-        />
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="to-date" className="text-sm font-medium">
+            To
+          </label>
+          <Input
+            type="date"
+            value={toDate}
+            onChange={(event) => {
+              setToDate(event.target.value);
+              setPage(1);
+            }}
+          />
+        </div>
       </div>
 
-      <OrderAnalyticsCards
-        metrics={metricsQuery.data?.data}
-        topSellingItems={topSellingQuery.data?.data}
-        isLoading={metricsQuery.isLoading || topSellingQuery.isLoading}
+      <OrdersTable
+        title="Orders"
+        description="All orders placed across the restaurant."
+        orders={orders}
+        isLoading={ordersQuery.isLoading}
+        error={ordersQuery.error}
+        errorMessage="Failed to load orders."
       />
-
-      {ordersQuery.isLoading ? (
-        <p className="text-sm text-muted-foreground">Loading orders...</p>
-      ) : ordersQuery.isError ? (
-        <div className="flex flex-col items-center gap-3 py-8 text-center">
-          <p className="text-sm text-muted-foreground">Failed to load orders.</p>
-          <Button variant="outline" onClick={() => ordersQuery.refetch()}>
-            Retry
-          </Button>
+      {pagination && pagination.totalPages > 1 ? (
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <span>
+            Page {pagination.page} of {pagination.totalPages} ({pagination.total} total)
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page <= 1}
+              onClick={() => setPage((value) => value - 1)}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page >= pagination.totalPages}
+              onClick={() => setPage((value) => value + 1)}
+            >
+              Next
+            </Button>
+          </div>
         </div>
-      ) : orders.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No orders found for the selected filters.</p>
-      ) : (
-        <>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Order #</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Created By</TableHead>
-                <TableHead>Created At</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {orders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="font-medium">{order.orderNumber}</TableCell>
-                  <TableCell>{order.status}</TableCell>
-                  <TableCell>${order.total.toFixed(2)}</TableCell>
-                  <TableCell>{order.createdByName ?? order.createdBy}</TableCell>
-                  <TableCell>
-                    {new Date(order.createdAt).toLocaleString(undefined, {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-
-          {pagination && pagination.totalPages > 1 ? (
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <span>
-                Page {pagination.page} of {pagination.totalPages} ({pagination.total} total)
-              </span>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page <= 1}
-                  onClick={() => setPage((value) => value - 1)}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={page >= pagination.totalPages}
-                  onClick={() => setPage((value) => value + 1)}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          ) : null}
-        </>
-      )}
+      ) : null}
     </div>
   );
 }
