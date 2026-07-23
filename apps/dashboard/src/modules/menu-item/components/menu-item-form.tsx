@@ -2,18 +2,20 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@srms/ui/components/button';
 import { Input } from '@srms/ui/components/input';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from '@srms/ui/components/dropdown-menu';
+
 import type { Category, KitchenSection, CreateMenuItemDTO } from '@srms/api-contracts';
 import { CreateMenuItemSchema } from '@srms/api-contracts';
-import { ChevronDownIcon } from 'lucide-react';
 
 import { Field, FieldError, FieldLabel } from '@srms/ui/components/field';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@srms/ui/components/select';
+import { getSelectOptions } from '@/lib/select-options';
+import { useMemo } from 'react';
 
 type MenuItemFormProps = {
   defaultValues?: Partial<CreateMenuItemDTO>;
@@ -43,6 +45,15 @@ export function MenuItemForm({
       isAvailable: defaultValues?.isAvailable ?? true,
     },
   });
+
+  const categoryOptions = useMemo(
+    () => getSelectOptions(categories, { label: 'name', value: 'id' }),
+    [categories],
+  );
+  const kitchenSectionOptions = useMemo(
+    () => getSelectOptions(kitchenSections, { label: 'name', value: 'id' }),
+    [kitchenSections],
+  );
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -101,35 +112,30 @@ export function MenuItemForm({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="categoryId">Category</FieldLabel>
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  render={
-                    <button
-                      id="categoryId"
-                      type="button"
-                      disabled={isPending}
-                      aria-invalid={fieldState.invalid}
-                      className="flex h-8 w-full items-center justify-between gap-1.5 rounded-lg border border-input bg-transparent py-2 pr-2 pl-2.5 text-sm whitespace-nowrap transition-colors outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20"
-                    >
-                      <span className={field.value ? '' : 'text-muted-foreground'}>
-                        {categories.find((category) => category.id === field.value)?.name ??
-                          'Select category'}
-                      </span>
-                      <ChevronDownIcon className="size-4 text-muted-foreground" />
-                    </button>
-                  }
-                ></DropdownMenuTrigger>
-                <DropdownMenuContent className="w-(--anchor-width)">
-                  <DropdownMenuRadioGroup value={field.value} onValueChange={field.onChange}>
-                    {categories.map((category) => (
-                      <DropdownMenuRadioItem key={category.id} value={category.id}>
-                        {category.name}
-                      </DropdownMenuRadioItem>
-                    ))}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <FieldLabel htmlFor="categoryId">
+                Category <span className="text-destructive">*</span>
+              </FieldLabel>
+              <Select
+                items={categoryOptions}
+                name={field.name}
+                value={field.value}
+                onValueChange={field.onChange}
+              >
+                <SelectTrigger
+                  id="categoryId"
+                  aria-invalid={fieldState.invalid}
+                  className="min-w-30"
+                >
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categoryOptions.map((cat) => (
+                    <SelectItem key={cat.value} value={cat.value}>
+                      {cat.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -145,34 +151,27 @@ export function MenuItemForm({
               <FieldLabel htmlFor="kitchenSectionId">
                 Kitchen Section <span className="text-destructive">*</span>
               </FieldLabel>
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  render={
-                    <button
-                      id="kitchenSectionId"
-                      type="button"
-                      disabled={isPending}
-                      aria-invalid={fieldState.invalid}
-                      className="flex h-8 w-full items-center justify-between gap-1.5 rounded-lg border border-input bg-transparent py-2 pr-2 pl-2.5 text-sm whitespace-nowrap transition-colors outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20"
-                    >
-                      <span className={field.value ? '' : 'text-muted-foreground'}>
-                        {kitchenSections.find((section) => section.id === field.value)?.name ??
-                          'Select kitchen section'}
-                      </span>
-                      <ChevronDownIcon className="size-4 text-muted-foreground" />
-                    </button>
-                  }
-                ></DropdownMenuTrigger>
-                <DropdownMenuContent className="w-(--anchor-width)">
-                  <DropdownMenuRadioGroup value={field.value} onValueChange={field.onChange}>
-                    {kitchenSections.map((section) => (
-                      <DropdownMenuRadioItem key={section.id} value={section.id}>
-                        {section.name}
-                      </DropdownMenuRadioItem>
-                    ))}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Select
+                items={kitchenSectionOptions}
+                name={field.name}
+                value={field.value}
+                onValueChange={field.onChange}
+              >
+                <SelectTrigger
+                  id="kitchenSectionId"
+                  aria-invalid={fieldState.invalid}
+                  className="min-w-30"
+                >
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent>
+                  {kitchenSectionOptions.map((section) => (
+                    <SelectItem key={section.value} value={section.value}>
+                      {section.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}

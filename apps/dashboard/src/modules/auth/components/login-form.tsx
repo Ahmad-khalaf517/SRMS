@@ -6,7 +6,20 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from '@srms/ui/compon
 import { Input } from '@srms/ui/components/input';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import {
+  SelectContent,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+  SelectLabel,
+  SelectGroup,
+} from '@srms/ui/components/select';
+const items = [
+  { label: 'Next.js', value: 'next' },
+  { label: 'React', value: 'react' },
+  { label: 'Vue', value: 'vue' },
+];
 import { useLogin } from '@/modules/auth/hooks/use-login';
 import { Link } from 'react-router';
 
@@ -39,6 +52,22 @@ export default function LoginForm({ className, ...props }: React.ComponentProps<
             Enter your email below to login to your account
           </p>
         </div>
+
+        <Select items={items}>
+          <SelectTrigger className="w-full max-w-48">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Fruits</SelectLabel>
+              {items.map((item) => (
+                <SelectItem key={item.value} value={item.value}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
           <Input
